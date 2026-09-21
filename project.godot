@@ -1,0 +1,39 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="vamp-gd"
+config/features=PackedStringArray("4.7")
+
+[autoload]
+
+DeDraw="*uid://vr6fy6w0a8ym"
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[dotnet]
+
+project/assembly_name="vamp-gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gdsharp_extensions/plugin.cfg")
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+rendering_device/driver.windows="d3d12"
