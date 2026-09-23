@@ -11,12 +11,12 @@
   // "cache": ".addons", // default
   "addons": {
     "de_draw": {
-        "url":"C:\\Users\\pickd\\Documents\\godot-addons\\de_draw",
-        "source": "symlink"
+        "url":"https://github.com/PickDough/godot-tools",
+        "subfolder": "de_draw",
     },
     "gdsharp_extensions": {
-        "url": "C:\\Users\\pickd\\Documents\\godot-addons\\gdsharp_extensions",
-        "source": "symlink"
+        "url": "https://github.com/PickDough/godot-tools",
+        "subfolder": "gdsharp_extensions"
     }
   }
 }

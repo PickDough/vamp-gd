@@ -37,3 +37,4 @@ enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gdsha
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+environment/defaults/default_environment="uid://bpjs1tktbr4dd"
