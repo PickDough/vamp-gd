@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://b1rtmxwie6nni"]
+
+[ext_resource type="PackedScene" uid="uid://d1qlk1g7fv4xm" path="res://scenes/player/body/player_body.tscn" id="1_urvl1"]
+
+[node name="Map" type="Node3D" unique_id=582235104]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1752144044]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=96111726]
+use_collision = true
+size = Vector3(20, 0.2, 20)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=872751563]
+transform = Transform3D(0.6870875, -0.24850315, 0.68275684, 0, 0.9396926, 0.34202012, -0.72657466, -0.23499775, 0.64565104, 12, 5, 12)
+fov = 45.0
+
+[node name="PlayerBody" parent="." unique_id=630194800 instance=ExtResource("1_urvl1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9414539, 0.635803, 2.9220052)

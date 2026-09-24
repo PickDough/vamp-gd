@@ -1,9 +1,17 @@
 [gd_scene format=3 uid="uid://d1qlk1g7fv4xm"]
 
-[ext_resource type="Script" uid="uid://ctes3acy8dvrv" path="res://scenes/player/body/PlayerBody.cs" id="1_6krb1"]
+[ext_resource type="Script" uid="uid://pw7u461ly8xp" path="res://scenes/player/body/PlayerBody.cs" id="1_6krb1"]
 [ext_resource type="PackedScene" uid="uid://bk0ccn0br1xyt" path="res://scenes/models/dude.tscn" id="1_qyate"]
 
-[node name="PlayerBody" type="Node3D" unique_id=1928319358]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vse7m"]
+radius = 0.3
+
+[node name="PlayerBody" type="CharacterBody3D" unique_id=630194800]
 script = ExtResource("1_6krb1")
 
 [node name="Mesh" parent="." unique_id=360058621 instance=ExtResource("1_qyate")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=832395496]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.042576, 0)
+shape = SubResource("CapsuleShape3D_vse7m")

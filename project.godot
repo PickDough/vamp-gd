@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="vamp-gd"
+run/main_scene="uid://b1rtmxwie6nni"
 config/features=PackedStringArray("4.7", "C#")
 
 [autoload]
