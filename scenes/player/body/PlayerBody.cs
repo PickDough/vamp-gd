@@ -1,10 +1,12 @@
-using Godot;
 using System;
+using Godot;
 
 public partial class PlayerBody : CharacterBody3D
 {
-    public const float Speed = 5.0f;
-    public const float JumpVelocity = 4.5f;
+    [Export]
+    public float Speed = 5.0f;
+    [Export]
+    public float JumpVelocity = 6.5f;
 
     private Node3D mesh = null!;
 
