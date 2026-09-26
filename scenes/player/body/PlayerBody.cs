@@ -1,14 +1,17 @@
 using System;
 using Godot;
 
+namespace vampgd.scenes.player.body;
+
 public partial class PlayerBody : CharacterBody3D
 {
     [Export]
-    public float Speed = 5.0f;
+    private float Speed = 5.0f;
     [Export]
-    public float JumpVelocity = 6.5f;
+    private float JumpVelocity = 6.5f;
 
     private Node3D mesh = null!;
+    private PlayerIntent intent = new();
 
     public override void _EnterTree()
     {
@@ -17,29 +20,36 @@ public partial class PlayerBody : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
     {
-        Vector3 velocity = Velocity;
+        intent = new PlayerIntent();
+        if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
+        {
+            intent = intent with { Jump = true };
+        }
 
-        // Add the gravity.
+        var inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+        var direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+        intent = intent with { Direction = direction };
+        Move((float)delta);
+    }
+
+    private void Move(float delta)
+    {
+        var velocity = Velocity;
         if (!IsOnFloor())
         {
             velocity += GetGravity() * (float)delta;
         }
 
-        // Handle Jump.
-        if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
+        if (intent.Jump && IsOnFloor())
         {
             velocity.Y = JumpVelocity;
         }
 
-        // Get the input direction and handle the movement/deceleration.
-        // As good practice, you should replace UI actions with custom gameplay actions.
-        Vector2 inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-        Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-        if (direction != Vector3.Zero)
+        if (intent.Direction.Length() > 0.001f)
         {
-            velocity.X = direction.X * Speed;
-            velocity.Z = direction.Z * Speed;
-            mesh.LookAt(mesh.GlobalPosition + direction);
+            velocity.X = intent.Direction.X * Speed;
+            velocity.Z = intent.Direction.Z * Speed;
+            mesh.LookAt(mesh.GlobalPosition + intent.Direction);
         }
         else
         {

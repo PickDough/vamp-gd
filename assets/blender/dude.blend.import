@@ -2098,7 +2098,7 @@ _subresources={
 "slices/amount": 0
 },
 "Jump_001": {
-"save_to_file/enabled": true,
+"save_to_file/enabled": false,
 "save_to_file/fallback_path": "res://assets/blender/jump.anim",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://dl3ushsax5l1o",
@@ -4154,7 +4154,7 @@ _subresources={
 "slices/amount": 0
 },
 "Running": {
-"save_to_file/enabled": true,
+"save_to_file/enabled": false,
 "save_to_file/fallback_path": "res://assets/blender/running.anim",
 "save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://bdgjsrmsejy6s",
