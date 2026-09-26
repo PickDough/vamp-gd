@@ -5,14 +5,29 @@ public partial class PlayerBody : CharacterBody3D
 {
     [Export]
     public float Speed = 5.0f;
+
     [Export]
     public float JumpVelocity = 6.5f;
 
+    [Export]
+    public float groundCheck = 1f;
+
     private Node3D mesh = null!;
+    private RayCast3D rayCast = null!;
+
+    public bool IsCloseToFloor => rayCast.IsColliding();
 
     public override void _EnterTree()
     {
         mesh = GetNode<Node3D>("Mesh");
+        rayCast = new RayCast3D
+        {
+            Enabled = true,
+            CollisionMask = 1,
+            ExcludeParent = true,
+            TargetPosition = Vector3.Down * groundCheck
+        };
+        AddChild(rayCast);
     }
 
     public override void _PhysicsProcess(double delta)
