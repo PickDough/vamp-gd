@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://bsm74eff7e45v"]
+
+[ext_resource type="Script" uid="uid://chh8nt8a4evb7" path="res://square.gd" id="1_2eeqm"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vse7m"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_vse7m"]
+size = Vector3(2, 4, 2)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_2eeqm"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_5epwn"]
+plane = Plane(-1, 0, 0, 0)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_xncbd"]
+plane = Plane(1, 0, 0, 0)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_vp4b8"]
+plane = Plane(0, 0, 1, 0)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_vse7m"]
+plane = Plane(0, 0, -1, 0)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2eeqm"]
+bounce = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjdw6"]
+albedo_color = Color(0.55258244, 0.15484113, 0.4579296, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ilsnw"]
+material = SubResource("StandardMaterial3D_jjdw6")
+radius = 0.025
+height = 0.05
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vse7m"]
+radius = 0.025
+
+[node name="Square" type="Node3D" unique_id=1979593179 node_paths=PackedStringArray("mesh")]
+script = ExtResource("1_2eeqm")
+time_offset = 0.025
+mesh = NodePath("RigidBody3D")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1744986104]
+transform = Transform3D(1, 0, 0, 0, 0.32531318, 0.94560635, 0, -0.94560635, 0.32531318, 0, 1.4020853, 0.5972373)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1368692336]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1455259847]
+mesh = SubResource("PlaneMesh_vse7m")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D" unique_id=1484493471]
+visible = false
+mesh = SubResource("BoxMesh_vse7m")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=1916340678]
+shape = SubResource("WorldBoundaryShape3D_2eeqm")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=1121525685]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_5epwn")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=122350025]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_xncbd")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="StaticBody3D" unique_id=1239383151]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+shape = SubResource("WorldBoundaryShape3D_vp4b8")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="StaticBody3D" unique_id=363882929]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+shape = SubResource("WorldBoundaryShape3D_vse7m")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=832632489]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02052474, 1.4688191, 0)
+physics_material_override = SubResource("PhysicsMaterial_2eeqm")
+
+[node name="Sphere" type="MeshInstance3D" parent="RigidBody3D" unique_id=1326577390]
+mesh = SubResource("SphereMesh_ilsnw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1370431868]
+shape = SubResource("SphereShape3D_vse7m")
