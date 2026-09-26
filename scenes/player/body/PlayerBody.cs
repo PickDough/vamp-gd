@@ -12,9 +12,13 @@ public partial class PlayerBody : CharacterBody3D
 
     [Export]
     private float groundCheck = 1f;
+    [Export]
+    private float rotationSpeed = 5f;
+    [Export]
+    private float gravityScale = 1f;
 
     private RayCast3D rayCast = null!;
-        public bool IsCloseToFloor => rayCast.IsColliding();
+    public bool IsCloseToFloor => rayCast.IsColliding();
     private Node3D mesh = null!;
     private PlayerIntent intent = new();
 
@@ -50,7 +54,7 @@ public partial class PlayerBody : CharacterBody3D
         var velocity = Velocity;
         if (!IsOnFloor())
         {
-            velocity += GetGravity() * (float)delta;
+            velocity += GetGravity() * gravityScale * (float)delta;
         }
 
         if (intent.Jump && IsOnFloor())
@@ -62,7 +66,15 @@ public partial class PlayerBody : CharacterBody3D
         {
             velocity.X = intent.Direction.X * Speed;
             velocity.Z = intent.Direction.Z * Speed;
-            mesh.LookAt(mesh.GlobalPosition + intent.Direction);
+
+            var worldDir = GlobalTransform.Basis * intent.Direction;
+            var current = mesh.GlobalBasis.Orthonormalized();
+            var target = Basis.LookingAt(worldDir, Vector3.Up);
+
+            float angle = current.GetRotationQuaternion().AngleTo(target.GetRotationQuaternion());
+            float t = angle > 1e-5f ? Mathf.Min(1f, rotationSpeed * delta / angle) : 1f;
+
+            mesh.GlobalBasis = current.Slerp(target, t).Orthonormalized();
         }
         else
         {
