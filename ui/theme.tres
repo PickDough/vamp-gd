@@ -1,0 +1,4 @@
+[gd_resource type="Theme" format=3 uid="uid://rei6snss6xx7"]
+
+[resource]
+MainButton/base_type = &"Button"

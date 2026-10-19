@@ -1,4 +1,5 @@
 using System;
+
 using Godot;
 
 namespace vampgd.scenes.player.body;
@@ -6,9 +7,9 @@ namespace vampgd.scenes.player.body;
 public partial class PlayerBody : CharacterBody3D
 {
     [Export]
-    private float Speed = 5.0f;
+    private float speed = 5.0f;
     [Export]
-    private float JumpVelocity = 6.5f;
+    private float jumpVelocity = 6.5f;
 
     [Export]
     private float groundCheck = 1f;
@@ -59,27 +60,27 @@ public partial class PlayerBody : CharacterBody3D
 
         if (intent.Jump && IsOnFloor())
         {
-            velocity.Y = JumpVelocity;
+            velocity.Y = jumpVelocity;
         }
 
         if (intent.Direction.Length() > 0.001f)
         {
-            velocity.X = intent.Direction.X * Speed;
-            velocity.Z = intent.Direction.Z * Speed;
+            velocity.X = intent.Direction.X * speed;
+            velocity.Z = intent.Direction.Z * speed;
 
             var worldDir = GlobalTransform.Basis * intent.Direction;
             var current = mesh.GlobalBasis.Orthonormalized();
             var target = Basis.LookingAt(worldDir, Vector3.Up);
 
-            float angle = current.GetRotationQuaternion().AngleTo(target.GetRotationQuaternion());
-            float t = angle > 1e-5f ? Mathf.Min(1f, rotationSpeed * delta / angle) : 1f;
+            var angle = current.GetRotationQuaternion().AngleTo(target.GetRotationQuaternion());
+            var t = angle > 1e-5f ? Mathf.Min(1f, rotationSpeed * delta / angle) : 1f;
 
             mesh.GlobalBasis = current.Slerp(target, t).Orthonormalized();
         }
         else
         {
-            velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-            velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
+            velocity.X = Mathf.MoveToward(Velocity.X, 0, speed);
+            velocity.Z = Mathf.MoveToward(Velocity.Z, 0, speed);
         }
 
         Velocity = velocity;

@@ -6,17 +6,21 @@
 // for any issues with JSONC.
 // -------------------------------------------------------------------- //
 {
-  "$schema": "https://chickensoft.games/schemas/addons.schema.json",
-  // "path": "addons", // default
-  // "cache": ".addons", // default
-  "addons": {
-    "de_draw": {
-        "url":"https://github.com/PickDough/godot-tools",
-        "subfolder": "de_draw",
-    },
-    "gdsharp_extensions": {
-        "url": "https://github.com/PickDough/godot-tools",
-        "subfolder": "gdsharp_extensions"
+    "$schema": "https://chickensoft.games/schemas/addons.schema.json",
+    // "path": "addons", // default
+    // "cache": ".addons", // default
+    "addons": {
+        "de_draw": {
+            "url": "https://github.com/PickDough/godot-tools",
+            "subfolder": "de_draw",
+        },
+        "gdsharp_extensions": {
+            "url": "https://github.com/PickDough/godot-tools",
+            "subfolder": "gdsharp_extensions"
+        },
+        "phantom_camera": {
+            "url": "https://github.com/ramokz/phantom-camera",
+            "subfolder": "addons/phantom_camera"
+        }
     }
-  }
 }

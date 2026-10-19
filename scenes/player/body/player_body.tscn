@@ -2,15 +2,20 @@
 
 [ext_resource type="Script" uid="uid://pw7u461ly8xp" path="res://scenes/player/body/PlayerBody.cs" id="1_6krb1"]
 [ext_resource type="PackedScene" uid="uid://bk0ccn0br1xyt" path="res://scenes/models/player_mesh.tscn" id="1_qyate"]
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="3_slimw"]
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="4_opu4b"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="5_qu1nm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vse7m"]
 radius = 0.3
 
+[sub_resource type="Resource" id="Resource_eidiu"]
+script = ExtResource("5_qu1nm")
+
 [node name="PlayerBody" type="CharacterBody3D" unique_id=630194800]
 script = ExtResource("1_6krb1")
-JumpVelocity = 9.0
 groundCheck = 1.2
-rotationSpeed = 12.0
+rotationSpeed = 10.0
 gravityScale = 1.3
 
 [node name="Mesh" parent="." unique_id=360058621 instance=ExtResource("1_qyate")]
@@ -19,3 +24,31 @@ transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=832395496]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.042576, 0)
 shape = SubResource("CapsuleShape3D_vse7m")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1127571909]
+physics_interpolation_mode = 2
+transform = Transform3D(1, -4e-45, 1e-45, 1e-45, 0.51449573, 0.8574929, -4e-45, -0.8574929, 0.51449573, 1.1e-44, 10.85667, 5.614002)
+top_level = true
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D" unique_id=1195235810]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("3_slimw")
+
+[node name="PhantomCamera3D" type="Node3D" parent="." unique_id=1497728557 node_paths=PackedStringArray("follow_target", "look_at_target")]
+transform = Transform3D(0.9999991, -4e-45, 1e-45, 1e-45, 0.5142505, 0.85708386, -4e-45, -0.8570842, 0.5142503, 1.1e-44, 10.85667, 5.614002)
+script = ExtResource("4_opu4b")
+follow_mode = 5
+follow_target = NodePath("..")
+look_at_mode = 2
+look_at_target = NodePath("..")
+tween_resource = SubResource("Resource_eidiu")
+follow_offset = Vector3(0, 4, 1.5)
+follow_damping = true
+follow_damping_value = Vector3(0.5, 0.5, 0.5)
+follow_distance = 8.0
+spring_length = 8.0
+look_at_offset = Vector3(0, 1.5, 0)
+align_transform_with_view = Callable()
+align_position_with_view = Callable()
+align_rotation_with_view = Callable()

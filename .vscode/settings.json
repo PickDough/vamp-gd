@@ -1,3 +1,6 @@
 {
-    "workbench.colorTheme": "Godot: (Default)"
+    "workbench.colorTheme": "Godot: (Default)",
+    "csharp-dev-tools.solutionViewer.selectedWorkspaceSolutions": [
+        "vamp-gd.sln"
+    ]
 }

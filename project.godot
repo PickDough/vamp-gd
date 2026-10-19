@@ -17,6 +17,8 @@ config/features=PackedStringArray("4.7", "C#")
 [autoload]
 
 DeDraw="*uid://vr6fy6w0a8ym"
+PhantomCameraManager="*uid://duq6jhf6unyis"
+AutoloadGame="*uid://psd8q0g118b3"
 
 [display]
 
@@ -29,7 +31,7 @@ project/assembly_name="vamp-gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gdsharp_extensions/plugin.cfg")
+enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gdsharp_extensions/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
 
 [physics]
 

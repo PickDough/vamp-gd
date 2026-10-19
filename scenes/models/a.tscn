@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dhslv1hn0d5jh"]
+
+[ext_resource type="PackedScene" uid="uid://cd2y775e0sg42" path="res://assets/blender/a.blend" id="1_pgtib"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_abqju"]
+animation = &"Walking_001"
+use_custom_timeline = true
+timeline_length = 3.0
+stretch_time_scale = true
+start_offset = 0.0
+loop_mode = 1
+
+[node name="a" unique_id=1973249844 instance=ExtResource("1_pgtib")]
+
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(71867583) index="0" unique_id=559334983]
+bones/0/rotation = Quaternion(-2.9803104e-08, 0.001548957, -3.255713e-10, 0.9999988)
+bones/1/rotation = Quaternion(0.028795041, -0.02756546, 0.9469359, -0.31894127)
+bones/2/rotation = Quaternion(0.0008551219, 0.0020670993, -0.30502924, 0.95234036)
+bones/2/scale = Vector3(0.9999999, 1, 0.9999998)
+bones/3/rotation = Quaternion(0.00815947, -0.010850697, 0.0046646, 0.99989694)
+bones/3/scale = Vector3(1.0008105, 1.0096015, 1.0051557)
+bones/4/rotation = Quaternion(0.015767539, -5.4126616e-05, 0.006051648, 0.99985737)
+bones/6/rotation = Quaternion(0.15491948, 0.020291276, 0.8319905, 0.53233457)
+bones/7/rotation = Quaternion(0.050114427, 0.031958234, 0.5170597, 0.8538832)
+bones/7/scale = Vector3(0.9999996, 0.96462184, 0.9999999)
+bones/8/rotation = Quaternion(0.02499795, -3.2812208e-05, -0.009381266, 0.99964356)
+bones/8/scale = Vector3(0.9992221, 0.8906286, 0.99489117)
+bones/9/rotation = Quaternion(0.026943978, -0.008408155, 0.2975913, 0.954276)
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2" unique_id=1625348258]
+tree_root = SubResource("AnimationNodeAnimation_abqju")
+anim_player = NodePath("../AnimationPlayer")

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://nncmskl8csff"]
+
+[ext_resource type="Theme" uid="uid://rei6snss6xx7" path="res://ui/theme.tres" id="1_uso86"]
+[ext_resource type="Script" uid="uid://b6cw6ep34w8m5" path="res://ui/screens/main menu/MainMenu.cs" id="2_nqcq4"]
+
+[node name="MainMenu" type="Control" unique_id=1512250030]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_uso86")
+script = ExtResource("2_nqcq4")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=527955091]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Play" type="Button" parent="CenterContainer" unique_id=277464373]
+layout_mode = 2
+theme = ExtResource("1_uso86")
+text = "Play"
