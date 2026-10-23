@@ -1,6 +1,12 @@
 {
-    "workbench.colorTheme": "Godot: (Default)",
+    "workbench.colorTheme": "Godot",
     "csharp-dev-tools.solutionViewer.selectedWorkspaceSolutions": [
         "vamp-gd.sln"
-    ]
+    ],
+    "editor.formatOnSave": true,
+    "cSpell.words": [
+        "Trimesh",
+        "vampgd"
+    ],
+    "editor.formatOnPaste": true
 }

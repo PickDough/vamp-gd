@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cxx8q1e2fd1a"]
 
-[ext_resource type="PackedScene" uid="uid://dhslv1hn0d5jh" path="res://scenes/models/a.tscn" id="1_uc2b4"]
+[ext_resource type="PackedScene" uid="uid://dhslv1hn0d5jh" path="res://assets/models/a.tscn" id="1_uc2b4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7rfux"]
 height = 1.0
