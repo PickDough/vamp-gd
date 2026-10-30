@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cujm2xqu4j158"]
+
+[ext_resource type="Script" uid="uid://00cnsgkb6uop" path="res://scenes/player/skills/slice/SliceSkill.cs" id="1_qjb4v"]
+[ext_resource type="PackedScene" uid="uid://dspjoy7uatnel" path="res://scenes/player/skills/slice/slice_action.tscn" id="2_nwb45"]
+[ext_resource type="Script" uid="uid://cxqjhl43dlvfy" path="res://scenes/player/skills/slice/SliceAction.cs" id="3_k0lje"]
+
+[node name="SliceSkill" type="Node3D" unique_id=154792199]
+script = ExtResource("1_qjb4v")
+modifiers = Dictionary[int, float]({
+0: 5.0,
+1: 0.5,
+2: 0.5,
+4: 2.0,
+5: 0.05,
+6: 2.0
+})
+
+[node name="SliceAction" parent="." unique_id=327040043 instance=ExtResource("2_nwb45")]
+script = ExtResource("3_k0lje")

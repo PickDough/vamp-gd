@@ -56,6 +56,8 @@ public partial class Map : Node3D
         navigationRegion.BakeNavigationMesh();
     }
 
+    public Vector3 RandomPosition() => PickRandomPointInsetFromEdges();
+
     private async void OnBakeFinished()
     {
         if (Engine.IsEditorHint())
