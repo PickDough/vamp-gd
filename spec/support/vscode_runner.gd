@@ -36,8 +36,8 @@ func _ready() -> void:
 			runner.add_spec_file(file)
 
 	if list_only:
+		get_tree().quit.call_deferred(0)
 		_list(runner._spec_files)
-		get_tree().quit(0)
 		return
 
 	if not filter.is_empty():

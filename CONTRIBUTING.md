@@ -211,3 +211,31 @@ A pre-commit hook lints the staged `.gd` files and blocks the commit on findings
 ```bash
 git config core.hooksPath .githooks
 ```
+
+## Neovim
+
+`.lazy.lua` in the project root sets Neovim up for this project only. It's for LazyVim (lazy.nvim loads a
+project's `.lazy.lua` automatically). It adds:
+
+- the Godot editor colorscheme ([bentok/godot.nvim](https://github.com/bentok/godot.nvim), pinned to a commit)
+- the GDScript language server and the Redot debug adapter, both served by the Redot editor
+- tree-sitter highlighting for `.gd`, `.tscn`/`.tres` and `.gdshader`
+- `lint.py`'s style rules as diagnostics on save
+- a `server.pipe` in the project root that Redot uses to open files in the running Neovim
+
+To use it:
+
+1. Open the project in Redot. It serves the language server (port 6005) and the debug adapter (port 6006).
+2. Start Neovim in the project root. The first start installs the theme, nvim-dap and the tree-sitter parsers.
+3. In Redot, set Editor Settings > Text Editor > External: **Use External Editor** on, **Exec Path** to your `nvim`,
+   and **Exec Flags** to:
+
+   ```
+   --server {project}/server.pipe --remote-send "<C-\><C-N>:e {file}<CR>:call cursor({line}+1,{col})<CR>"
+   ```
+
+   Also turn on Editor Settings > Network > Language Server > **Use Thread**.
+
+Debug with the LazyVim DAP keys (`<leader>dc` to continue/start, `<leader>db` for a breakpoint); the "Launch main
+scene" configuration runs the game from Redot. The GDScript tree-sitter grammar predates Redot's `struct_name`,
+`trait_name`, `uses` and `T?`, so those lines may highlight imperfectly; the language server understands them.

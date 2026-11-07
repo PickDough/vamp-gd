@@ -11,8 +11,8 @@ indent_style = space
 trim_trailing_whitespace = true
 # Ensures that every file ends with a new line.
 insert_final_newline = true
-# Sets the end-of-line character to CRLF (standard on Windows).
-end_of_line = crlf
+# Uses LF line endings, as Redot writes them.
+end_of_line = lf
 # Establishes a maximum line length of 120 characters.
 max_line_length = 120
 

@@ -40,3 +40,6 @@ tools/vscode-gspec/*.vsix
 
 # Written by tools/lint/lint.py while it runs; never commit it.
 override.cfg
+
+# Neovim listens here so Redot can open files in it; see .lazy.lua.
+server.pipe
