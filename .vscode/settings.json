@@ -1,12 +1,12 @@
 {
-    "workbench.colorTheme": "Godot",
-    "csharp-dev-tools.solutionViewer.selectedWorkspaceSolutions": [
-        "vamp-gd.sln"
-    ],
-    "editor.formatOnSave": true,
-    "cSpell.words": [
-        "Trimesh",
-        "vampgd"
-    ],
-    "editor.formatOnPaste": true
+	"workbench.colorTheme": "Godot",
+	"editor.formatOnSave": true,
+	"cSpell.words": [
+		"Trimesh"
+	],
+	"editor.formatOnPaste": true,
+	"godotTools.editorPath.godot3": "/Applications/Redot_mono.app",
+    "editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"vim.autoindent": false
 }

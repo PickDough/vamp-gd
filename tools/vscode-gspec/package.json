@@ -1,0 +1,29 @@
+{
+  "name": "vscode-gspec",
+  "displayName": "GSpec Test Explorer",
+  "description": "Lists and runs this project's gspec specs in the Test Explorer through Redot.",
+  "publisher": "local",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Testing"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "workspaceContains:project.godot"
+  ],
+  "contributes": {
+    "configuration": {
+      "title": "GSpec",
+      "properties": {
+        "gspec.redotPath": {
+          "type": "string",
+          "default": "/Applications/Redot_mono.app/Contents/MacOS/Redot",
+          "description": "Redot executable used to list and run specs."
+        }
+      }
+    }
+  }
+}

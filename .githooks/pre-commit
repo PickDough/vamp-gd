@@ -1,0 +1,5 @@
+#!/bin/sh
+# Lints staged GDScript with tools/lint/lint.py. Enable with: git config core.hooksPath .githooks
+if git diff --cached --name-only --diff-filter=ACMR -- '*.gd' | grep -q .; then
+	git diff --cached --name-only -z --diff-filter=ACMR -- '*.gd' | xargs -0 python3 tools/lint/lint.py
+fi

@@ -1,0 +1,240 @@
+[gd_scene load_steps=13 format=3 uid="uid://dspjoy7uatnel"]
+
+[ext_resource type="Script" uid="uid://cxqjhl43dlvfy" path="res://skills/slice/slice_action.gd" id="1_n5owt"]
+
+[sub_resource type="Animation" id="Animation_qjb4v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.29409695, 0.3647853, -0.50224626)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8391931, -1.3562835e-08, 0.3089212)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-4.4703484e-08, 0, -5.2154064e-08)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CollisionShape3D:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8391931, -1.3562835e-08, 0.3089212)]
+}
+
+[sub_resource type="Animation" id="Animation_apnw5"]
+resource_name = "slice"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1333, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.294, 0.38, -0.502), Vector3(-0.233, 0.311, 0.229), Vector3(0.23, 0.492, -0.027)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.8391931, -1.3562835e-08, 0.3089212), Vector3(-0.15958755, 0.48931256, 0.7812502), Vector3(0.29473555, 2.025562, 1.9876661)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MeshInstance3D/GPUParticles3D")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CollisionShape3D:position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.13336584, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.294, 0.38, -0.502), Vector3(-0.233, 0.311, 0.229), Vector3(0.23, 0.492, -0.027)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CollisionShape3D:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.13336584, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.8391931, -1.3562835e-08, 0.3089212), Vector3(-0.15958755, 0.48931256, 0.7812502), Vector3(0.29473555, 2.025562, 1.9876661)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qjb4v"]
+_data = {
+&"RESET": SubResource("Animation_qjb4v"),
+&"slice": SubResource("Animation_apnw5")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n5owt"]
+size = Vector3(0.5, 4, 0.5)
+
+[sub_resource type="Curve" id="Curve_apnw5"]
+_data = [Vector2(0, 0.27767348), 0.0, 0.0, 0, 0, Vector2(0.5503597, 0.8536585), 0.6628362, 0.6628362, 0, 0, Vector2(1, 0.66863906), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="TubeTrailMesh" id="TubeTrailMesh_vse7m"]
+radius = 0.1
+section_length = 0.3
+curve = SubResource("Curve_apnw5")
+
+[sub_resource type="Shader" id="Shader_trail_process"]
+code = "shader_type particles;
+render_mode keep_data, disable_force, disable_velocity;
+
+uniform float half_width = 0.75;
+
+void process() {
+	float amount = LIFETIME;
+	vec4 a = EMISSION_TRANSFORM * vec4(0.0, half_width, 0.0, 1.0);
+	vec4 b = EMISSION_TRANSFORM * vec4(0.0, -half_width, 0.0, 1.0);
+
+	if (CUSTOM.w == 0.0) {
+		CUSTOM.w = float(INDEX) + 1.0;
+		CUSTOM.z = amount;
+		TRANSFORM = mat4(a, a, b, b);
+	}
+
+	if (CUSTOM.w == amount + 1.0) {
+		CUSTOM.w = 1.0;
+	}
+
+	if (CUSTOM.w == 1.0) {
+		TRANSFORM = mat4(a, a, b, b);
+	}
+
+	if (CUSTOM.w == 2.0) {
+		if (distance(TRANSFORM[0].xyz, a.xyz) > 0.8) {
+			TRANSFORM[0] = a;
+			TRANSFORM[3] = b;
+		}
+		TRANSFORM[1] = a;
+		TRANSFORM[2] = b;
+	}
+
+	CUSTOM.w += 1.0;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_trail_process"]
+shader = SubResource("Shader_trail_process")
+shader_parameter/half_width = 0.75
+
+[sub_resource type="Shader" id="Shader_trail_draw"]
+code = "shader_type spatial;
+render_mode unshaded, world_vertex_coords, cull_disabled, blend_add;
+
+uniform vec4 trail_color : source_color = vec4(0.82, 0.94, 1.0, 0.85);
+
+void vertex() {
+	vec3 a = mix(MODEL_MATRIX[1].xyz, MODEL_MATRIX[0].xyz, UV.x);
+	vec3 b = mix(MODEL_MATRIX[2].xyz, MODEL_MATRIX[3].xyz, UV.x);
+	VERTEX = mix(a, b, UV.y);
+	UV.x = (UV.x + INSTANCE_CUSTOM.w - 3.0) / max(INSTANCE_CUSTOM.z - 2.0, 1.0);
+}
+
+void fragment() {
+	if (UV.x <= 0.0 || UV.x >= 1.0) {
+		discard;
+	}
+	float fade = clamp(1.0 - UV.x, 0.0, 1.0);
+	ALBEDO = trail_color.rgb;
+	ALPHA = fade * fade * trail_color.a;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_trail_draw"]
+render_priority = 0
+shader = SubResource("Shader_trail_draw")
+shader_parameter/trail_color = Color(0.82, 0.94, 1, 0.85)
+
+[sub_resource type="QuadMesh" id="QuadMesh_trail"]
+material = SubResource("ShaderMaterial_trail_draw")
+
+[node name="SliceAction" type="Area3D"]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("1_n5owt")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries/ = SubResource("AnimationLibrary_qjb4v")
+speed_scale = 1.2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.9526621, -0.30403107, -9.060835e-09, 0.20311205, 0.6364387, 0.7441043, -0.22623082, -0.70888, 0.66806346, -4.4703484e-08, 0, -5.2154064e-08)
+shape = SubResource("BoxShape3D_n5owt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.3816552, -0.7600777, -2.2652086e-08, 0.50778013, 1.5910969, 1.8602608, -0.56557703, -1.7722, 1.6701586, -0.29409695, 0.3647853, -0.50224626)
+mesh = SubResource("TubeTrailMesh_vse7m")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, -2.2351742e-08, 0, 1, 0, -7.450581e-09, -2.9802322e-08, 1, 0, 0, 0)
+cast_shadow = 0
+amount = 22
+lifetime = 22.0
+explosiveness = 1.0
+fixed_fps = 60
+interpolate = false
+fract_delta = false
+process_material = SubResource("ShaderMaterial_trail_process")
+draw_pass_1 = SubResource("QuadMesh_trail")

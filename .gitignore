@@ -19,11 +19,6 @@ export_presets.cfg
 #
 # Imported translations (automatically generated from CSV files)
 *.translation
-#
-# Mono-specific ignores
-.mono/
-data_*/
-mono_crash.*.json
 # -------------------------------------------------------------------- #
 
 # GodotEnv Addons
@@ -34,6 +29,14 @@ addons/*
 # Don't ignore the editorconfig file in the addons directory.
 !addons/.editorconfig
 #
+# phantom_camera is vendored (without its C# wrappers), not managed by GodotEnv.
+!addons/phantom_camera/
+#
 # Ignore the addons cache
 .addons/*
 # -------------------------------------------------------------------- #
+# Built by tools/vscode-gspec/package.py
+tools/vscode-gspec/*.vsix
+
+# Written by tools/lint/lint.py while it runs; never commit it.
+override.cfg

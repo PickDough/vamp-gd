@@ -11,14 +11,19 @@ config_version=5
 [application]
 
 config/name="vamp-gd"
-run/main_scene="uid://nncmskl8csff"
-config/features=PackedStringArray("4.7", "C#")
+run/main_scene="res://main.tscn"
+config/features=PackedStringArray("26.3", "Redot")
 
 [autoload]
 
 DeDraw="*uid://vr6fy6w0a8ym"
 PhantomCameraManager="*uid://duq6jhf6unyis"
 AutoloadGame="*uid://psd8q0g118b3"
+
+[debug]
+
+gdscript/warnings/show_experimental_struct_warning=false
+gdscript/warnings/show_experimental_trait_warning=false
 
 [display]
 
@@ -31,11 +36,24 @@ project/assembly_name="vamp-gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gdsharp_extensions/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
+enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gspec/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
+
+[layer_names]
+
+3d_physics/layer_1="world"
+3d_physics/layer_2="player"
+3d_physics/layer_3="enemies"
+3d_physics/layer_4="player_attacks"
+3d_physics/layer_5="pickups"
+
+[navigation]
+
+3d/default_cell_height=0.02
 
 [physics]
 
 3d/physics_engine="Jolt Physics"
+common/physics_interpolation=true
 
 [rendering]
 

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SkillStats" load_steps=2 format=3 uid="uid://dwncfj1fsowgy"]
+
+[ext_resource type="Script" uid="uid://bigmpi52wvb8g" path="res://data/skill_stats.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
+damage = 5.0
+speed = 0.5
+area = 0.4
+cooldown = 2.0
+critical_chance = 0.05
+critical_multiplier = 2.0
+count = 2
+target_range = 10.0

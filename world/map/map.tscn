@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://b1rtmxwie6nni"]
+
+[ext_resource type="Script" uid="uid://ch3l3m8fy4lkn" path="res://world/map/map.gd" id="1_urvl1"]
+[ext_resource type="VoxelGIData" uid="uid://ct5e38oua4haq" path="res://world/map/map.VoxelGI_data.res" id="2_ers5l"]
+[ext_resource type="PackedScene" path="res://world/spawning/enemy_spawner.tscn" id="3_c3pkw"]
+[ext_resource type="Script" path="res://core/navigation/synced_navigation_region.gd" id="4_navsync"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_abqju"]
+geometry_parsed_geometry_type = 1
+cell_height = 0.03
+border_size = 1.0
+
+[sub_resource type="TextMesh" id="TextMesh_c3pkw"]
+text = "A"
+font_size = 64
+pixel_size = 4.0
+depth = 12.0
+
+[node name="Map" type="Node3D"]
+script = ExtResource("1_urvl1")
+
+[node name="VoxelGI" type="VoxelGI" parent="."]
+size = Vector3(400, 100, 400)
+data = ExtResource("2_ers5l")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+script = ExtResource("4_navsync")
+navigation_mesh = SubResource("NavigationMesh_abqju")
+
+[node name="TextMesh" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("TextMesh_c3pkw")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="NavigationRegion3D/TextMesh"]
+transform = Transform3D(-0.3414302, -4.1084643e-08, -0.93990725, 4.1084647e-08, 1, -5.8635777e-08, 0.93990725, -5.8635774e-08, -0.3414302, -70.317055, -7.4522185, -32.489594)
+shadow_enabled = true
+
+[node name="EnemySpawner" parent="." instance=ExtResource("3_c3pkw")]

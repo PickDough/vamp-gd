@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://cujm2xqu4j158"]
+
+[ext_resource type="Script" uid="uid://00cnsgkb6uop" path="res://skills/slice/slice_skill.gd" id="1_qjb4v"]
+[ext_resource type="Resource" uid="uid://dwncfj1fsowgy" path="res://skills/slice/slice_stats.tres" id="2_stats"]
+[ext_resource type="Script" uid="uid://bqhqeolcppxod" path="res://skills/shared/target_detector.gd" id="3_detector"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_detector"]
+resource_local_to_scene = true
+
+[node name="SliceSkill" type="Node3D"]
+script = ExtResource("1_qjb4v")
+stats = ExtResource("2_stats")
+base_travel_speed = 35.0
+
+[node name="Detector" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+script = ExtResource("3_detector")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Detector"]
+shape = SubResource("SphereShape3D_detector")
+
+[node name="Cooldown" type="Timer" parent="."]
