@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "redot": {
+      "type": "stdio",
+      "command": "/Applications/Redot_mono.app/Contents/MacOS/Redot",
+      "args": [
+        "--headless",
+        "--mcp-server",
+        "--path",
+        "/Users/user/Documents/vamp-rd"
+      ],
+      "env": {}
+    }
+  }
+}
