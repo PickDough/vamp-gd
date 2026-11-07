@@ -38,21 +38,18 @@ process_priority = 300
 process_physics_priority = 300
 script = ExtResource("3_slimw")
 
-[node name="PhantomCamera3D" type="Node3D" parent="." node_paths=PackedStringArray("follow_target", "look_at_target")]
+[node name="PhantomCamera3D" type="Node3D" parent="." node_paths=PackedStringArray("follow_target")]
 transform = Transform3D(0.9999991, -4e-45, 1e-45, 1e-45, 0.5142505, 0.85708386, -4e-45, -0.8570842, 0.5142503, 1.1e-44, 10.85667, 5.614002)
 top_level = true
 script = ExtResource("4_opu4b")
 follow_mode = 5
 follow_target = NodePath("..")
-look_at_mode = 2
-look_at_target = NodePath("..")
 tween_resource = SubResource("Resource_eidiu")
 follow_offset = Vector3(0, 4, 1.5)
 follow_damping = true
 follow_damping_value = Vector3(0.5, 0.5, 0.5)
 follow_distance = 8.0
 spring_length = 8.0
-look_at_offset = Vector3(0, 1.5, 0)
 align_transform_with_view = Callable()
 align_position_with_view = Callable()
 align_rotation_with_view = Callable()

@@ -185,6 +185,8 @@ func _reset_world() -> void:
 		Input.action_release(action)
 	_held_actions.clear()
 	Engine.time_scale = 1.0
+	if _runner == null:
+		return
 
 	var scene := tree.current_scene
 	if scene != null and scene != _runner:

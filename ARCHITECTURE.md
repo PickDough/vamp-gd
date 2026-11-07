@@ -123,7 +123,6 @@ SliceAction ──HitInfo──▶ Damageable.take_hit(hit) ──▶ Health.app
 | `ui/screens/main_menu/`, `ui/theme.tres` | title screen and shared theme |
 | `world/map/` | `Map`: letter mesh, collision, navigation; emits `ready_for_player` |
 | `world/spawning/` | `EnemySpawner`, `SpawnScenario`; `setup(player, navigation_region)` |
-| `world/activities/` | `Pickup`, `Shrine` stubs |
 | `actors/player/` | `PlayerBody`, `PlayerIntent` |
 | `actors/enemies/` | `Enemy`, `enemy_a.tscn` (with a `Health` node) |
 | `skills/shared/` | `TargetDetector`: nearest damageable bodies in range |

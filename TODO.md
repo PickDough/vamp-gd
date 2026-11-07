@@ -23,7 +23,7 @@ goes and [CONTRIBUTING.md](CONTRIBUTING.md) for how to write it.
   - [ ] `Run` emits `finished` when the player dies
   - [ ] `Main` shows a game-over screen with retry and back to menu
 - [ ] XP and levelling
-  - [ ] Enemies drop XP pickups when they die (fill in `Pickup`)
+  - [ ] Enemies drop XP pickups when they die (a `Pickup` scene in `world/activities/`)
   - [ ] The player collects pickups on the pickups physics layer
   - [ ] `Run` tracks XP and level and emits `xp_changed` and `level_reached`
   - [ ] Level-up choice screen that pauses the run
@@ -39,7 +39,7 @@ goes and [CONTRIBUTING.md](CONTRIBUTING.md) for how to write it.
   - [ ] Extract a shared `Skill` base (cooldown, targeting) once both exist
 - [ ] Shrines
   - [ ] Decide what a shrine does
-  - [ ] Implement it (fill in `Shrine`)
+  - [ ] Implement it (a `Shrine` scene in `world/activities/`)
 - [ ] Words and letters
   - [ ] Decide how `words.tres` shapes a run (e.g. one map per letter of a word)
   - [ ] Move between letter maps within a run
