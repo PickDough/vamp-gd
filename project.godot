@@ -16,9 +16,9 @@ config/features=PackedStringArray("26.3", "Redot")
 
 [autoload]
 
-DeDraw="*uid://vr6fy6w0a8ym"
 PhantomCameraManager="*uid://duq6jhf6unyis"
 AutoloadGame="*uid://psd8q0g118b3"
+DeDraw="*res://addons/de_draw/autoload/dedraw_global.gd"
 
 [debug]
 

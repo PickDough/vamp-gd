@@ -4,11 +4,11 @@
 
 [resource]
 script = ExtResource("1_stats")
-damage = 5.0
+damage = 4.0
 speed = 0.5
 area = 0.4
 cooldown = 2.0
-critical_chance = 0.05
+critical_chance = 0.25
 critical_multiplier = 2.0
 count = 2
 target_range = 10.0

@@ -5,10 +5,13 @@ extends Area3D
 ## from behind, swings once and frees itself, hitting each body at most once. Stats.area scales the blade and its
 ## hitbox but not the swing path.
 
+@export var critical_color: Color = Color.GOLD
+
 var _stats: SkillStats
 var _travel_time: float = 0.0
 var _origin: Node3D
 var _hit_bodies: Array[Node3D] = []
+var _hit: HitInfo
 
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer
 @onready var _mesh: MeshInstance3D = $MeshInstance3D
@@ -23,12 +26,15 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	_animation_player.animation_finished.connect(_on_animation_finished)
 	get_tree().create_timer(_travel_time, false, true).timeout.connect(_swing)
+	if _hit.is_critical:
+		(_mesh.get_active_material(0) as StandardMaterial3D).albedo_color = critical_color
 
 
 func setup(stats: SkillStats, travel_time: float, origin: Node3D) -> void:
 	_stats = stats
 	_travel_time = travel_time
 	_origin = origin
+	_hit = _stats.roll_hit()
 
 
 func _scale_by_area() -> void:
@@ -55,7 +61,11 @@ func _on_body_entered(body: Node3D) -> void:
 		return
 
 	_hit_bodies.append(body)
-	(body as Damageable).take_hit(_stats.roll_hit())
+
+	var hit: HitInfo = _hit
+	hit.hit_point = _mesh.global_position + global_transform.basis.z
+	hit.hit_direction = (body.global_position - global_position).normalized() + Vector3.UP
+	(body as Damageable).take_hit(hit)
 
 
 func _on_animation_finished(_animation_name: StringName) -> void:

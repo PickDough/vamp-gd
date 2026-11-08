@@ -96,8 +96,9 @@ func _refresh_path() -> void:
 ### Structs, traits and classes
 
 - **struct**: plain data with no behaviour, copied by value (`PlayerIntent`).
-- **trait**: shared behaviour with a contract that unrelated classes adopt with `uses` (`Damageable`). Traits don't
-  receive engine callbacks such as `_ready`; react to setters or let the adopting class call in.
+- **trait**: shared behaviour with a contract that unrelated classes adopt with `uses` (`Damageable`). Traits can
+  hold state, `@onready` references and default implementations, and receive engine callbacks such as `_ready`. A
+  callback the adopting class defines replaces the trait's one, so keep each callback in one of the two.
 - **class**: nodes and resources.
 
 ## Formatting
@@ -124,8 +125,9 @@ func _refresh_path() -> void:
 
   Use `%UniqueName` for nodes that may move in the scene tree. Use `TreeQuery` only for dynamic lookups, such as
   searching spawned nodes by type.
-- Call down, signal up: a parent calls methods on its children; a child emits signals for its parent. Don't reach
-  up with `get_parent()` or `../` paths; take the dependency as an `@export` reference or have the parent pass it in.
+- Call down, signal up: a parent calls methods on its children; a child emits signals for its parent. Reaching up
+  with `get_parent()` or `../` paths is allowed, for example for a component node that works on its owner
+  (`DamageEffect`).
 - Connect a node's signals in one place, either in the scene or in `_ready()`, not both.
 - Load scenes with `load()` where you instantiate them; don't `preload()` them into constants. Scene preloads
   create load cycles that leave exported properties unset (see ARCHITECTURE.md).
@@ -150,8 +152,9 @@ func _refresh_path() -> void:
 
 ## Comments
 
-- The only comment allowed is the script's doc comment: a `##` block right after the header (`class_name`,
+- Every script except specs has a doc comment: a `##` block right after the header (`class_name`, `struct_name`,
   `extends`, `uses`) stating what the script is for. Mention workarounds and engine quirks there.
+- The doc comment is the only comment allowed.
 - Nothing else gets a comment: not functions, variables, constants or lines. Say it through names instead: a
   well-named function, variable or constant replaces the comment that would explain it.
 - `#region`/`#endregion` and `# lint-ignore: rule` directives are not comments and are allowed.
@@ -194,8 +197,8 @@ editor.
   declarations, unsafe access and casts, unused or shadowed names, …). The project itself keeps them as warnings,
   so the editor shows them and the game still runs.
 - **style**: naming, file names, declaration order, two blank lines between functions, line length, function
-  length, comments, boolean operators, number format, quotes, and hygiene (`print`, `self.`, reaching up the tree,
-  node references outside `@onready`, public members nothing else uses).
+  length, comments and doc comments, boolean operators, number format, quotes, and hygiene (`print`, `self.`, node
+  references outside `@onready`, public members, including `@onready` ones, that nothing else uses).
 
 ```bash
 python3 tools/lint/lint.py
@@ -221,6 +224,9 @@ project's `.lazy.lua` automatically). It adds:
 - the GDScript language server and the Redot debug adapter, both served by the Redot editor
 - tree-sitter highlighting for `.gd`, `.tscn`/`.tres` and `.gdshader`
 - `lint.py`'s style rules as diagnostics on save
+- GDQuest's [GDScript formatter](https://github.com/GDQuest/GDScript-formatter) through conform.nvim, the same
+  binary and defaults the VS Code/Cursor `godot-format` extension uses (format on save, or `<leader>cf`). It skips
+  files with Redot-only syntax (`struct_name`, `trait_name`, `uses`, `T?`), which its parser can't read
 - a `server.pipe` in the project root that Redot uses to open files in the running Neovim
 
 To use it:
@@ -236,6 +242,9 @@ To use it:
 
    Also turn on Editor Settings > Network > Language Server > **Use Thread**.
 
-Debug with the LazyVim DAP keys (`<leader>dc` to continue/start, `<leader>db` for a breakpoint); the "Launch main
-scene" configuration runs the game from Redot. The GDScript tree-sitter grammar predates Redot's `struct_name`,
+Debug with `<leader>dc` (start/continue), `<leader>db` (breakpoint), `<leader>di`/`do`/`dO` (step into/over/out),
+`<leader>dr` (REPL) and `<leader>dt` (stop); the "Launch main scene" configuration runs the game from Redot.
+`.lazy.lua` adds nvim-dap directly instead of importing LazyVim's `dap.core` extra, because lazy.nvim loads
+`.lazy.lua` after your own plugins and LazyVim requires extras to come before them. For the full debugger UI,
+enable `dap.core` in `:LazyExtras`. The GDScript tree-sitter grammar predates Redot's `struct_name`,
 `trait_name`, `uses` and `T?`, so those lines may highlight imperfectly; the language server understands them.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dspjoy7uatnel"]
+[gd_scene load_steps=14 format=3 uid="uid://dspjoy7uatnel"]
 
 [ext_resource type="Script" uid="uid://cxqjhl43dlvfy" path="res://skills/slice/slice_action.gd" id="1_n5owt"]
 
@@ -128,6 +128,9 @@ _data = {
 [sub_resource type="BoxShape3D" id="BoxShape3D_n5owt"]
 size = Vector3(0.5, 4, 0.5)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q2o8n"]
+resource_local_to_scene = true
+
 [sub_resource type="Curve" id="Curve_apnw5"]
 _data = [Vector2(0, 0.27767348), 0.0, 0.0, 0, 0, Vector2(0.5503597, 0.8536585), 0.6628362, 0.6628362, 0, 0, Vector2(1, 0.66863906), 0.0, 0.0, 0, 0]
 point_count = 3
@@ -225,6 +228,7 @@ shape = SubResource("BoxShape3D_n5owt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(2.3816552, -0.7600777, -2.2652086e-08, 0.50778013, 1.5910969, 1.8602608, -0.56557703, -1.7722, 1.6701586, -0.29409695, 0.3647853, -0.50224626)
+material_override = SubResource("StandardMaterial3D_q2o8n")
 mesh = SubResource("TubeTrailMesh_vse7m")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="MeshInstance3D"]

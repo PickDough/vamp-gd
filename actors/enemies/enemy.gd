@@ -1,6 +1,6 @@
 class_name Enemy
 extends CharacterBody3D
-uses Damageable
+uses PhysicsCharacterBody, Damageable
 
 ## Walks toward its target along the navigation mesh, alternating a full-speed step with a slower one in time with
 ## its walk animation, and dies when its Health runs out. Without a target it holds its position.
@@ -17,7 +17,6 @@ var _target: Node3D? = null
 
 @onready var _animation_player: AnimationPlayer = $Model/AnimationPlayer
 @onready var _nav_agent: NavigationAgent3D = $NavigationAgent3D
-@onready var _health: Health = $Health
 @onready var _target_refresh_timer: Timer = $TargetRefreshTimer
 
 
@@ -30,20 +29,23 @@ func _ready() -> void:
 	_refresh_target_position()
 
 
-func _physics_process(_delta: float) -> void:
-	var next_position := _nav_agent.get_next_path_position()
-	velocity = (next_position - global_position).normalized() * speed * _step_speed_factor()
-	if not next_position.is_equal_approx(global_position):
-		look_at(next_position)
+func _physics_process(delta: float) -> void:
+	if is_on_floor():
+		var next_position := _nav_agent.get_next_path_position()
+		if not global_position.is_equal_approx(next_position):
+			look_at(next_position)
+
+		velocity = (next_position - global_position).normalized() * speed * _step_speed_factor()
+	else:
+		velocity = Vector3.ZERO
+
+	_simulate_physics(delta)
+
 	move_and_slide()
 
 
 func setup(target: Node3D?) -> void:
 	_target = target
-
-
-func take_hit(hit: HitInfo) -> void:
-	_health.apply(hit)
 
 
 func _refresh_target_position() -> void:

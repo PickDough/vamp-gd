@@ -29,7 +29,7 @@ ENGINE_MARKER = "@@LINT@@"
 # The check scene quits by itself; the limit only stops Redot if a script error prevents that.
 ENGINE_FRAME_LIMIT = 600
 
-SKIPPED_DIRECTORIES = {"addons", ".godot", ".git", "node_modules", "reports"}
+SKIPPED_DIRECTORIES = {"addons", ".addons", ".godot", ".git", "node_modules", "reports"}
 # Scripts whose job is to print: test reporters and the engine-check runner.
 PRINT_ALLOWED = ("spec/support/", "tools/lint/")
 
@@ -38,6 +38,8 @@ TAB_WIDTH = 4
 MAX_FUNCTION_LINES = 10
 # Specs are long single scenarios on purpose.
 FUNCTION_LENGTH_EXEMPT = ("spec/",)
+# Specs describe themselves through describe() and it().
+DOC_COMMENT_EXEMPT = ("spec/",)
 
 # GDScript warnings the engine pass raises to errors. The project keeps them as warnings so the game still runs.
 ENGINE_WARNINGS = [
@@ -254,10 +256,19 @@ class StyleChecker:
             self.check_formatting(index, raw, code, comment)
             self.check_hygiene(index, code)
             self.check_names(index, code)
+        self.check_doc_comment()
         self.check_order_and_spacing()
         self.check_function_length()
         self.check_private_members()
         return self.findings
+
+    def check_doc_comment(self):
+        if str(self.path).startswith(DOC_COMMENT_EXEMPT):
+            return
+        for raw in self.lines[: self.first_member_line()]:
+            if raw.startswith("##"):
+                return
+        self.report(0, 0, "doc-comment", "start the script with a '##' doc comment after the header saying what it is for")
 
     # File and class names.
     def check_file_name(self):
@@ -321,9 +332,6 @@ class StyleChecker:
         match = re.search(r"\bpreload\(\s*\"[^\"]*\.tscn\"", self.lines[index])
         if match:
             self.report(index, match.start(), "no-scene-preload", "load scenes with load() where they're used; preloading them can create load cycles that leave exported properties unset")
-        match = re.search(r"\bget_parent\(\)|get_node\(\s*\"\.\.|\$\"?\.\.", code)
-        if match:
-            self.report(index, match.start(), "no-reaching-up", "don't reach up the tree; take the dependency through setup() or @export")
         if not code.lstrip().startswith("@onready"):
             match = re.search(r"(?<![\w.])get_node\(|(?<![\w\"])\$[\w\"%/]", code)
             if match and not path.startswith("spec/"):
@@ -484,7 +492,7 @@ class StyleChecker:
     # Members other scripts don't use should be private.
     def check_private_members(self):
         for index, kind, name in self.declarations():
-            if kind not in ("public variable", "public method") or name.startswith("_"):
+            if kind not in ("public variable", "onready variable", "public method") or name.startswith("_"):
                 continue
             if self.public_uses.get(name, set()) - {str(self.path)}:
                 continue

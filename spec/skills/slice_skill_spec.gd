@@ -71,7 +71,7 @@ func spec() -> void:
 			)
 
 			it(
-				"kills an enemy with a single critical cut",
+				"kills an enemy with a single critical cut, drawn in the critical color",
 				func() -> void:
 					var run := await start_run("A")
 					var player := run.player
@@ -83,13 +83,21 @@ func spec() -> void:
 
 					var enemy := spawn_pinned_enemy(player.global_position + Vector3.RIGHT * slice_range * 0.5)
 					var full_health: float = health_of(enemy).max_health
+					skill.stats.damage = full_health / skill.stats.critical_multiplier
 
+					var slices_in_critical_color: Array[bool] = []
 					var cut := func() -> bool:
+						for slice: SliceAction in skill.find_children("*", "SliceAction", false, false):
+							var mesh := TreeQuery.find_under(slice, MeshInstance3D) as MeshInstance3D
+							var material := mesh.get_active_material(0) as StandardMaterial3D
+							slices_in_critical_color.append(material.albedo_color == slice.critical_color)
 						return not is_instance_valid(enemy) or health_of(enemy).current < full_health
 					if not await wait_until(cut, "the enemy is cut", _cast_window(skill)):
 						return
 					await tree.process_frame
-					expect(is_instance_valid(enemy)).to(be_false()),
+					expect(is_instance_valid(enemy)).to(be_false())
+					expect(slices_in_critical_color).not_to(be_empty())
+					expect(slices_in_critical_color).to(all(be_true())),
 			)
 
 			it(
@@ -133,6 +141,8 @@ func spec() -> void:
 								expect(box_size.is_equal_approx(base_box_size * area)).to(be_true())
 								var mesh := TreeQuery.find_under(slice, MeshInstance3D) as MeshInstance3D
 								expect(mesh.scale.is_equal_approx(base_mesh_scale * area)).to(be_true())
+								var material := mesh.get_active_material(0) as StandardMaterial3D
+								expect(material.albedo_color).not_to(eq((slice as SliceAction).critical_color))
 							if slice.visible and slice not in swung:
 								if swung.is_empty():
 									release(&"ui_left")
@@ -153,6 +163,43 @@ func spec() -> void:
 					var seconds_between := frames_between * TIME_SCALE / Engine.physics_ticks_per_second
 					var expected_delay := extra_distance / travel_speed
 					expect(seconds_between).to(be_between(expected_delay * 0.5, expected_delay * 1.5)),
+			)
+
+			it(
+				"knocks the cut enemy up and away from the player",
+				func() -> void:
+					var run := await start_run("A")
+					var player := run.player
+					if player == null:
+						return
+					var skill := TreeQuery.find_under(player, SliceSkill) as SliceSkill
+					skill.stats.critical_chance = 0.0
+					var region := run.map.navigation_region.get_rid()
+					var ground := NavigationServer3D.region_get_closest_point(
+							region,
+							player.global_position + Vector3.RIGHT * skill.stats.target_range * 0.5,
+					)
+					var enemy := spawn_enemy(ground)
+					if not await wait_until(enemy.is_on_floor, "the enemy lands after spawning", 5.0):
+						return
+					var start := enemy.global_position
+					var start_distance := horizontal_distance(enemy, player)
+					var full_health: float = health_of(enemy).max_health
+
+					var heights: Array[float] = []
+					var cut := func() -> bool:
+						heights.append(enemy.global_position.y)
+						return health_of(enemy).current < full_health
+					if not await wait_until(cut, "the enemy is cut", _cast_window(skill)):
+						return
+					var landed := func() -> bool:
+						heights.append(enemy.global_position.y)
+						return enemy.is_on_floor()
+					if not await wait_until(landed, "the enemy lands after the cut", 5.0):
+						return
+
+					expect(heights.max()).to(be_greater_than(start.y))
+					expect(horizontal_distance(enemy, player)).to(be_greater_than(start_distance)),
 			),
 	)
 

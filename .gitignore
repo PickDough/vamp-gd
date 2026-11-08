@@ -29,9 +29,6 @@ addons/*
 # Don't ignore the editorconfig file in the addons directory.
 !addons/.editorconfig
 #
-# phantom_camera is vendored (without its C# wrappers), not managed by GodotEnv.
-!addons/phantom_camera/
-#
 # Ignore the addons cache
 .addons/*
 # -------------------------------------------------------------------- #

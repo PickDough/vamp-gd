@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://d1qlk1g7fv4xm"]
+[gd_scene load_steps=9 format=3 uid="uid://d1qlk1g7fv4xm"]
 
 [ext_resource type="Script" uid="uid://pw7u461ly8xp" path="res://actors/player/player_body.gd" id="1_6krb1"]
 [ext_resource type="PackedScene" uid="uid://bk0ccn0br1xyt" path="res://assets/models/player_mesh.tscn" id="1_qyate"]
@@ -30,7 +30,7 @@ shape = SubResource("CapsuleShape3D_vse7m")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 physics_interpolation_mode = 2
-transform = Transform3D(1, -4e-45, 1e-45, 1e-45, 0.51449573, 0.8574929, -4e-45, -0.8574929, 0.51449573, 1.1e-44, 10.85667, 5.614002)
+transform = Transform3D(0.9999991, -4e-45, 1e-45, 1e-45, 0.5142505, 0.85708386, -4e-45, -0.8570842, 0.5142503, 1.1e-44, 10.85667, 5.614002)
 top_level = true
 
 [node name="PhantomCameraHost" type="Node" parent="Camera3D"]
@@ -52,9 +52,7 @@ follow_distance = 8.0
 spring_length = 8.0
 align_transform_with_view = Callable()
 align_position_with_view = Callable()
-align_rotation_with_view = Callable()
 
 [node name="SliceSkill" parent="." instance=ExtResource("6_slice")]
 
 [node name="GroundRay" type="RayCast3D" parent="."]
-collision_mask = 1

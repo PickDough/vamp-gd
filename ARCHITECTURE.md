@@ -41,7 +41,7 @@ No screen frees itself or changes the scene tree root.
 
 - **Builds** the map for the chosen letter, and spawns the player once the map reports it is ready.
 - **Wires** dependencies by handing them down: `spawner.setup(player, map.navigation_region)`. Spawned enemies get
-  their target from the spawner. Nothing looks dependencies up through globals or `get_parent()`.
+  their target from the spawner. Nothing looks dependencies up through globals.
 - **Owns run state** once it exists (elapsed time, XP, gold, level), exposed as signals for the HUD.
 - **Relays** cross-feature events once there are any: it listens to its children (an enemy died, a pickup was
   collected) and updates state or calls down into other children.
@@ -78,8 +78,9 @@ exported property values.
   skill, not scattered through the code.
 - Stats live in their own `.tres` next to the feature (`skills/slice/slice_stats.tres`). A node that changes its
   resource at runtime duplicates it in `_ready`, so instances don't share one copy.
-- Traits stay thin. Redot doesn't call engine callbacks such as `_ready` on traits, so anything with a lifecycle
-  becomes a component node.
+- Traits can hold state, `@onready` references and default method bodies, and Redot calls their engine callbacks
+  (`_ready`, `_process`, …). A callback the adopting class defines replaces the trait's one, so keep each callback
+  in either the trait or the class, not both.
 
 ## Combat
 
@@ -90,7 +91,7 @@ SliceAction ──HitInfo──▶ Damageable.take_hit(hit) ──▶ Health.app
 ```
 
 - An attack builds a `HitInfo` struct (amount, is_critical) and calls `take_hit` on anything `Damageable`.
-  `take_hit` is abstract in the trait, so a class that `uses Damageable` without implementing it doesn't load.
+  By default `Damageable.take_hit` applies the hit to the adopter's `Health` child; an adopter can override it.
 - The target's `Health` component applies it and emits `damaged` and `died`. It never frees its owner.
 - The owner decides what death means (`Enemy` emits `died` and frees itself); `Run` will hear about it through that
   signal once there is XP to award.

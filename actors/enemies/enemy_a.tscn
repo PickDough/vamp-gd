@@ -1,8 +1,9 @@
-[gd_scene format=3 uid="uid://cxx8q1e2fd1a"]
+[gd_scene load_steps=6 format=3 uid="uid://cxx8q1e2fd1a"]
 
 [ext_resource type="PackedScene" uid="uid://dhslv1hn0d5jh" path="res://assets/models/a.tscn" id="1_uc2b4"]
 [ext_resource type="Script" uid="uid://clm1jn4povpss" path="res://actors/enemies/enemy.gd" id="2_enemy"]
-[ext_resource type="Script" path="res://core/health.gd" id="3_health"]
+[ext_resource type="Script" uid="uid://c1g7t8amj4mek" path="res://core/health.gd" id="3_health"]
+[ext_resource type="Script" path="res://actors/enemies/damage_effect.gd" id="4_2neib"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7rfux"]
 height = 1.0
@@ -11,8 +12,8 @@ height = 1.0
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("2_enemy")
+speed = 1.2
 target_refresh_interval = 0.1
-speed = 0.7
 
 [node name="Model" parent="." instance=ExtResource("1_uc2b4")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
@@ -29,3 +30,7 @@ script = ExtResource("3_health")
 
 [node name="TargetRefreshTimer" type="Timer" parent="."]
 process_callback = 0
+
+[node name="DamageEffect" type="Node" parent="."]
+script = ExtResource("4_2neib")
+hit_force = 0.3

@@ -19,6 +19,7 @@ local function listen_for_redot()
   pcall(vim.fn.serverstart, pipe)
 end
 
+
 listen_for_redot()
 
 local godot_theme_captures = {
@@ -52,6 +53,19 @@ return {
   { "LazyVim/LazyVim", opts = { colorscheme = "godot" } },
 
   {
+    "folke/snacks.nvim",
+    opts = {
+      picker = {
+        sources = {
+          files = { exclude = { "*.uid" } },
+          grep = { exclude = { "*.uid" } },
+          explorer = { exclude = { "*.uid" } },
+        },
+      },
+    },
+  },
+
+  {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
@@ -65,16 +79,50 @@ return {
     opts = { ensure_installed = { "gdscript", "godot_resource", "gdshader" } },
   },
 
-  { import = "lazyvim.plugins.extras.dap.core" },
   {
     "mfussenegger/nvim-dap",
-    opts = function()
+    keys = {
+      { "<leader>dc", function() require("dap").continue() end, desc = "Run/Continue" },
+      { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
+      { "<leader>di", function() require("dap").step_into() end, desc = "Step Into" },
+      { "<leader>do", function() require("dap").step_over() end, desc = "Step Over" },
+      { "<leader>dO", function() require("dap").step_out() end, desc = "Step Out" },
+      { "<leader>dr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
+      { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate" },
+    },
+    config = function()
       local dap = require("dap")
       dap.adapters.godot = { type = "server", host = "127.0.0.1", port = 6006 }
       dap.configurations.gdscript = {
         { type = "godot", request = "launch", name = "Launch main scene", project = root },
       }
     end,
+  },
+
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = { gdscript = { "gdscript_formatter" } },
+      formatters = {
+        gdscript_formatter = {
+          command = function()
+            local on_path = vim.fn.exepath("gdscript-formatter")
+            if on_path ~= "" then
+              return on_path
+            end
+            for _, editor in ipairs({ "~/.cursor", "~/.vscode" }) do
+              local pattern = editor .. "/extensions/dohe.godot-format-*/binaries/gdscript-formatter"
+              local bundled = vim.fn.glob(pattern, false, true)
+              if #bundled > 0 then
+                return bundled[#bundled]
+              end
+            end
+            return "gdscript-formatter"
+          end,
+          stdin = true,
+        },
+      },
+    },
   },
 
   {
