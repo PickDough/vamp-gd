@@ -23,6 +23,7 @@ func apply(hit: HitInfo) -> void:
 		return
 
 	current -= hit.amount
-	damaged.emit(hit)
 	if _is_dead:
 		died.emit(hit)
+	else:
+		damaged.emit(hit)

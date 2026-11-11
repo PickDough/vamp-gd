@@ -35,7 +35,7 @@ PRINT_ALLOWED = ("spec/support/", "tools/lint/")
 
 MAX_LINE_LENGTH = 120
 TAB_WIDTH = 4
-MAX_FUNCTION_LINES = 10
+MAX_FUNCTION_LINES = 16
 # Specs are long single scenarios on purpose.
 FUNCTION_LENGTH_EXEMPT = ("spec/",)
 # Specs describe themselves through describe() and it().

@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cxx8q1e2fd1a"]
+[gd_scene load_steps=7 format=3 uid="uid://cxx8q1e2fd1a"]
 
-[ext_resource type="PackedScene" uid="uid://dhslv1hn0d5jh" path="res://assets/models/a.tscn" id="1_uc2b4"]
+[ext_resource type="PackedScene" uid="uid://dhslv1hn0d5jh" path="res://assets/models/a_scene.tscn" id="1_uc2b4"]
 [ext_resource type="Script" uid="uid://clm1jn4povpss" path="res://actors/enemies/enemy.gd" id="2_enemy"]
 [ext_resource type="Script" uid="uid://c1g7t8amj4mek" path="res://core/health.gd" id="3_health"]
-[ext_resource type="Script" path="res://actors/enemies/damage_effect.gd" id="4_2neib"]
+[ext_resource type="Script" uid="uid://c8s8w14yl8x1i" path="res://actors/enemies/on_hit_effect.gd" id="4_2neib"]
+[ext_resource type="Shape3D" uid="uid://2tq8iyj5b3wo" path="res://assets/models/a_model_shape.tres" id="4_sasvt"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7rfux"]
 height = 1.0
@@ -18,12 +19,12 @@ target_refresh_interval = 0.1
 [node name="Model" parent="." instance=ExtResource("1_uc2b4")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="SimpleCollisionShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CapsuleShape3D_7rfux")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
-debug_enabled = true
+simplify_path = true
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("3_health")
@@ -31,6 +32,12 @@ script = ExtResource("3_health")
 [node name="TargetRefreshTimer" type="Timer" parent="."]
 process_callback = 0
 
-[node name="DamageEffect" type="Node" parent="."]
+[node name="ComplexCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = ExtResource("4_sasvt")
+disabled = true
+
+[node name="OnHitEffect" type="Node" parent="."]
 script = ExtResource("4_2neib")
-hit_force = 0.3
+hit_force = 0.25
+death_force = 5.0

@@ -2,18 +2,16 @@ class_name Enemy
 extends CharacterBody3D
 uses PhysicsCharacterBody, Damageable
 
-## Walks toward its target along the navigation mesh, alternating a full-speed step with a slower one in time with
-## its walk animation, and dies when its Health runs out. Without a target it holds its position.
-
-signal died
-
-const STEP_DURATION := 0.6
-const SLOW_STEP_SPEED_FACTOR := 0.7
+## Walks toward its target along the navigation mesh and dies when its Health runs out.
+## Without a target it holds its position.
 
 @export var speed: float = 2.0
 @export var target_refresh_interval: float = 0.3
 
 var _target: Node3D? = null
+
+@onready var rg_collision: CollisionShape3D = $ComplexCollisionShape
+@onready var model: EnemyModel = $Model
 
 @onready var _animation_player: AnimationPlayer = $Model/AnimationPlayer
 @onready var _nav_agent: NavigationAgent3D = $NavigationAgent3D
@@ -35,7 +33,7 @@ func _physics_process(delta: float) -> void:
 		if not global_position.is_equal_approx(next_position):
 			look_at(next_position)
 
-		velocity = (next_position - global_position).normalized() * speed * _step_speed_factor()
+		velocity = (next_position - global_position).normalized() * speed
 	else:
 		velocity = Vector3.ZERO
 
@@ -56,11 +54,5 @@ func _refresh_target_position() -> void:
 		_nav_agent.target_position = global_position
 
 
-func _step_speed_factor() -> float:
-	var step := int(_animation_player.current_animation_position / STEP_DURATION)
-	return 1.0 if step % 2 == 0 else SLOW_STEP_SPEED_FACTOR
-
-
 func _on_health_died(_hit: HitInfo) -> void:
-	died.emit()
 	queue_free()

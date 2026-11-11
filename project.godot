@@ -44,7 +44,7 @@ enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gspec
 3d_physics/layer_2="player"
 3d_physics/layer_3="enemies"
 3d_physics/layer_4="player_attacks"
-3d_physics/layer_5="pickups"
+3d_physics/layer_5="rigid_bodies"
 
 [navigation]
 
@@ -52,10 +52,14 @@ enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gspec
 
 [physics]
 
+3d/run_on_separate_thread=true
 3d/physics_engine="Jolt Physics"
+jolt_physics_3d/simulation/velocity_steps=4
+3d/solver/solver_iterations=8
 common/physics_interpolation=true
 
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+renderer/rendering_method="mobile"
 environment/defaults/default_environment="uid://bpjs1tktbr4dd"

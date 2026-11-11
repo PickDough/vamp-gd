@@ -30,7 +30,7 @@ shape = SubResource("CapsuleShape3D_vse7m")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 physics_interpolation_mode = 2
-transform = Transform3D(0.9999991, -4e-45, 1e-45, 1e-45, 0.5142505, 0.85708386, -4e-45, -0.8570842, 0.5142503, 1.1e-44, 10.85667, 5.614002)
+transform = Transform3D(0.9999991, -4e-45, 1e-45, 1e-45, 0.5142505, 0.85708386, -4e-45, -0.8570842, 0.5142503, 1.1e-44, 14.35667, 6.614002)
 top_level = true
 
 [node name="PhantomCameraHost" type="Node" parent="Camera3D"]
@@ -39,13 +39,13 @@ process_physics_priority = 300
 script = ExtResource("3_slimw")
 
 [node name="PhantomCamera3D" type="Node3D" parent="." node_paths=PackedStringArray("follow_target")]
-transform = Transform3D(0.9999991, -4e-45, 1e-45, 1e-45, 0.5142505, 0.85708386, -4e-45, -0.8570842, 0.5142503, 1.1e-44, 10.85667, 5.614002)
+transform = Transform3D(0.9999991, -4e-45, 1e-45, 1e-45, 0.5142505, 0.85708386, -4e-45, -0.8570842, 0.5142503, 1.1e-44, 14.35667, 6.614002)
 top_level = true
 script = ExtResource("4_opu4b")
 follow_mode = 5
 follow_target = NodePath("..")
 tween_resource = SubResource("Resource_eidiu")
-follow_offset = Vector3(0, 4, 1.5)
+follow_offset = Vector3(0, 7.5, 2.5)
 follow_damping = true
 follow_damping_value = Vector3(0.5, 0.5, 0.5)
 follow_distance = 8.0
@@ -54,5 +54,6 @@ align_transform_with_view = Callable()
 align_position_with_view = Callable()
 
 [node name="SliceSkill" parent="." instance=ExtResource("6_slice")]
+base_travel_speed = 17.0
 
 [node name="GroundRay" type="RayCast3D" parent="."]

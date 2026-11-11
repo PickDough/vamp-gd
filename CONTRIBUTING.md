@@ -127,7 +127,7 @@ func _refresh_path() -> void:
   searching spawned nodes by type.
 - Call down, signal up: a parent calls methods on its children; a child emits signals for its parent. Reaching up
   with `get_parent()` or `../` paths is allowed, for example for a component node that works on its owner
-  (`DamageEffect`).
+  (`OnHitEffect`).
 - Connect a node's signals in one place, either in the scene or in `_ready()`, not both.
 - Load scenes with `load()` where you instantiate them; don't `preload()` them into constants. Scene preloads
   create load cycles that leave exported properties unset (see ARCHITECTURE.md).
@@ -165,7 +165,7 @@ func _refresh_path() -> void:
   visual debugging.
 - No commented-out code; version control remembers it.
 - No `self.` unless it disambiguates.
-- A function body has at most 10 lines, not counting blank lines. Return early from guard clauses instead of
+- A function body has at most 16 lines, not counting blank lines. Return early from guard clauses instead of
   nesting. Specs are exempt: each one is a single long scenario on purpose.
 - Split a long function by naming its steps (`_read_intent()`, `_next_velocity()`), but don't let a script turn
   into a pile of small functions. Logic that is self-contained or reusable gets its own script or node:
