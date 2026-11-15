@@ -23,7 +23,7 @@ depth = 12.0
 script = ExtResource("5_l1bpj")
 radius_around_player = 150.0
 amount_per_tick = 416.0
-max_enemies = 2500
+max_enemies = 1250
 enemy_scenes = Array[PackedScene]([ExtResource("6_sft5n")])
 metadata/_custom_type_script = "uid://g56sk1sio1ge"
 

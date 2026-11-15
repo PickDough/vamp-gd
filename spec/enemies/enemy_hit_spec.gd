@@ -17,6 +17,7 @@ func spec() -> void:
 					if player == null:
 						return
 					TreeQuery.find_under(player, SliceSkill).free()
+					run.map.enemy_spawner.get_node("TickTimer").stop()
 					var enemy := _spawn_on_floor_away_from(run, player)
 					if not await wait_until(enemy.is_on_floor, "the enemy lands after spawning", LAND_TIMEOUT):
 						return

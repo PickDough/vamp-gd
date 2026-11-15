@@ -12,6 +12,7 @@ const COLINEAR_LIMIT := 0.999
 
 var _target: Node3D? = null
 var _time_until_refresh: float = 0.0
+var _fall_and_impulse: Vector3 = Vector3.ZERO
 
 @onready var rg_collision: CollisionShape3D = $ComplexCollisionShape
 @onready var model: EnemyModel = $Model
@@ -19,8 +20,10 @@ var _time_until_refresh: float = 0.0
 @onready var _animation_player: AnimationPlayer = $Model/AnimationPlayer
 @onready var _nav_agent: NavigationAgent3D = $NavigationAgent3D
 
+
 func _ready() -> void:
 	_health.died.connect(_on_health_died)
+	_nav_agent.velocity_computed.connect(_on_safe_velocity_computed)
 	_animation_player.play(&"Walking_001")
 	_refresh_target_position()
 
@@ -40,8 +43,14 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity = Vector3.ZERO
 
+	var walking := velocity
 	_simulate_physics(delta)
+	_fall_and_impulse = velocity - walking
+	_nav_agent.velocity = walking
 
+
+func _on_safe_velocity_computed(safe_velocity: Vector3) -> void:
+	velocity = safe_velocity + _fall_and_impulse
 	move_and_slide()
 
 
