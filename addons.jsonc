@@ -24,6 +24,7 @@
 		},
 		"debug_menu": {
 			"url": "https://github.com/godot-extended-libraries/godot-debug-menu",
+			"checkout": "master",
 			"subfolder": "addons/debug_menu"
 		}
 	}

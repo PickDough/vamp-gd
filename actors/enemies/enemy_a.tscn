@@ -11,10 +11,10 @@ height = 1.0
 
 [node name="EnemyA" type="CharacterBody3D"]
 collision_layer = 4
-collision_mask = 7
+collision_mask = 3
 script = ExtResource("2_enemy")
 speed = 1.2
-target_refresh_interval = 0.1
+target_refresh_interval = 0.3
 
 [node name="Model" parent="." instance=ExtResource("1_uc2b4")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
@@ -28,9 +28,6 @@ simplify_path = true
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("3_health")
-
-[node name="TargetRefreshTimer" type="Timer" parent="."]
-process_callback = 0
 
 [node name="ComplexCollisionShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)

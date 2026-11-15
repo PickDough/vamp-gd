@@ -32,5 +32,6 @@ func _start_despawn_timer(timeout: float) -> void:
 	var timer := Timer.new()
 	timer.wait_time = timeout
 	timer.one_shot = true
+	timer.autostart = true
 	timer.timeout.connect(queue_free)
 	add_child(timer)

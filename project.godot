@@ -11,14 +11,16 @@ config_version=5
 [application]
 
 config/name="vamp-gd"
+config/version="1.0.0"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("26.3", "Redot")
 
 [autoload]
 
-PhantomCameraManager="*uid://duq6jhf6unyis"
+PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
 AutoloadGame="*uid://psd8q0g118b3"
 DeDraw="*res://addons/de_draw/autoload/dedraw_global.gd"
+DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 
 [debug]
 
@@ -36,7 +38,7 @@ project/assembly_name="vamp-gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gspec/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
+enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/debug_menu/plugin.cfg", "res://addons/gspec/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
 
 [layer_names]
 
@@ -53,8 +55,9 @@ enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/gspec
 [physics]
 
 3d/run_on_separate_thread=true
+common/physics_ticks_per_second=30
 3d/physics_engine="Jolt Physics"
-jolt_physics_3d/simulation/velocity_steps=4
+jolt_physics_3d/simulation/velocity_steps=2
 3d/solver/solver_iterations=8
 common/physics_interpolation=true
 

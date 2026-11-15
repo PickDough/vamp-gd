@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SpawnScenario" load_steps=3 format=3 uid="uid://da6h35i7lwsys"]
+
+[ext_resource type="PackedScene" uid="uid://cxx8q1e2fd1a" path="res://actors/enemies/enemy_a.tscn" id="1_iynvd"]
+[ext_resource type="Script" uid="uid://g56sk1sio1ge" path="res://world/spawning/spawn_scenario.gd" id="2_2ess8"]
+
+[resource]
+script = ExtResource("2_2ess8")
+radius_around_player = 30.0
+amount_per_tick = 215.0
+max_enemies = 100
+enemy_scenes = Array[PackedScene]([ExtResource("1_iynvd")])

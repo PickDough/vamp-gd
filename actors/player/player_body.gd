@@ -28,11 +28,18 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not _is_in_physics_space():
+		return
+
 	var intent := _read_intent()
 	velocity = _next_velocity(intent, delta)
 	if intent.direction.length() > DIRECTION_EPSILON:
 		_turn_toward(global_transform.basis * intent.direction, delta)
 	move_and_slide()
+
+
+func _is_in_physics_space() -> bool:
+	return PhysicsServer3D.body_get_direct_state(get_rid()) != null
 
 
 func _read_intent() -> PlayerIntent:

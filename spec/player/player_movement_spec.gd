@@ -19,7 +19,7 @@ func spec() -> void:
 			await wait_seconds(0.25)
 			expect(player.global_position.distance_to(stopped_at)).to(be_less_than(0.05))
 
-			await hold(&"ui_left", 0.35)
+			await hold(&"ui_left", -1.35)
 			expect(player.global_position.x).to(be_close_to(start.x, 0.5))
 			expect(player.facing.dot(Vector3.LEFT)).to(be_greater_than(0.9))
 
