@@ -16,12 +16,13 @@ goes and [CONTRIBUTING.md](CONTRIBUTING.md) for how to write it.
 ## 2. Core gameplay loop
 
 - [ ] Player health
-  - [ ] Give the player a `Health` node and make `PlayerBody` use `Damageable`
-  - [ ] Enemies deal contact damage to the player through `HitInfo`
-  - [ ] Player death ends the run
+  - [x] Give the player a `Health` node and make `PlayerBody` use `Damageable`
+  - [x] Enemies deal contact damage to the player through `HitInfo`
+  - [x] Player death ends the run
+  - [x] Contact damage is the current minute of the run (`Score`)
 - [ ] Game over
-  - [ ] `Run` emits `finished` when the player dies
-  - [ ] `Main` shows a game-over screen with retry and back to menu
+  - [x] `Run` emits `finished` when the player dies
+  - [ ] `Main` shows a game-over screen with retry and back to menu (it returns to the main menu for now)
 - [ ] XP and levelling
   - [ ] Enemies drop XP pickups when they die (a `Pickup` scene in `world/activities/`)
   - [ ] The player collects pickups on the pickups physics layer
@@ -64,8 +65,7 @@ goes and [CONTRIBUTING.md](CONTRIBUTING.md) for how to write it.
   - [ ] Add more enemy scenes
   - [ ] Introduce an `EnemyStats` resource once variants differ in more than speed
 - [ ] Enemy movement
-  - [ ] Turn on NavigationAgent avoidance so chasing enemies don't stack into one blob
-  - [ ] Turn off `debug_enabled` on the NavigationAgent in `enemy_a.tscn` (the red path lines)
+  - [x] Keep chasing enemies from stacking into one blob (grid separation in `EnemyState`)
 - [ ] Spawning
   - [ ] Tune a spawn-scenario timeline for a full run
   - [ ] Add scenarios that introduce new enemy variants over time

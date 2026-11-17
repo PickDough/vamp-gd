@@ -1,72 +1,71 @@
 class_name Enemy
-extends CharacterBody3D
-uses PhysicsCharacterBody, Damageable
+extends Node3D
+uses Damageable, HitReactive
 
-## Walks toward its target along the navigation mesh and dies when its Health runs out.
-## Without a target it holds its position.
-
-const COLINEAR_LIMIT := 0.999
+## An enemy with Health that dies when its Health runs out. It has no body and no model of its own: the Hive it is
+## registered with moves it, takes its impulses and draws it, playing `walk_animation` of `model_scene` (placed by
+## `model_transform`) from a crowd MultiMesh in `body_color`, one of `colors` picked when it registers, and flashed by
+## `tint`. Its hit_radius is what attacks hit. It leaves the
+## hive when it leaves the tree. speed, turn_speed (radians per second), mass, hit_radius and the model settings are
+## read once, when it registers. When it dies it leaves a DeathBody ragdoll pushed along the killing hit.
 
 @export var speed: float = 2.0
-@export var target_refresh_interval: float = 0.3
+@export var turn_speed: float = 4.0
+@export var mass: float = 1.0
+@export var hit_radius: float = 0.5
+@export var model_scene: PackedScene
+@export var model_transform := Transform3D.IDENTITY
+@export var walk_animation: StringName = &"Walking_001"
+@export var colors: Array[Color] = [
+	Color(0.98, 0.66, 0.7),
+	Color(0.62, 0.78, 0.98),
+	Color(1.0, 0.9, 0.56),
+	Color(0.66, 0.9, 0.76),
+	Color(0.8, 0.7, 0.98),
+]
+@export var ragdoll_shape: Shape3D
+@export var ragdoll_shape_scale: float = 1.0
+@export var death_force: float = 10.0
+@export var death_timeout: float = 2.0
 
-var _target: Node3D? = null
-var _time_until_refresh: float = 0.0
-var _fall_and_impulse: Vector3 = Vector3.ZERO
-
-@onready var rg_collision: CollisionShape3D = $ComplexCollisionShape
-@onready var model: EnemyModel = $Model
-
-@onready var _animation_player: AnimationPlayer = $Model/AnimationPlayer
-@onready var _nav_agent: NavigationAgent3D = $NavigationAgent3D
+var hive: Hive? = null
+var hive_slot: int = 0
+var body_color := Color.WHITE
+var tint := Color.WHITE:
+	set(value):
+		tint = value
+		var current_hive := hive
+		if current_hive != null:
+			current_hive.tint(hive_slot, value)
 
 
 func _ready() -> void:
 	_health.died.connect(_on_health_died)
-	_nav_agent.velocity_computed.connect(_on_safe_velocity_computed)
-	_animation_player.play(&"Walking_001")
-	_refresh_target_position()
 
 
-func _physics_process(delta: float) -> void:
-	_time_until_refresh -= delta
-	if _time_until_refresh <= 0.0:
-		_refresh_target_position()
-
-	if is_on_floor():
-		var next_position := _nav_agent.get_next_path_position()
-		var direction := (next_position - global_position).normalized()
-		if not direction.is_zero_approx() and absf(direction.dot(Vector3.UP)) < COLINEAR_LIMIT:
-			look_at(next_position)
-
-		velocity = (next_position - global_position).normalized() * speed
-	else:
-		velocity = Vector3.ZERO
-
-	var walking := velocity
-	_simulate_physics(delta)
-	_fall_and_impulse = velocity - walking
-	_nav_agent.velocity = walking
+func _exit_tree() -> void:
+	var current_hive := hive
+	if current_hive != null and is_instance_valid(current_hive):
+		current_hive.unregister(self)
 
 
-func _on_safe_velocity_computed(safe_velocity: Vector3) -> void:
-	velocity = safe_velocity + _fall_and_impulse
-	move_and_slide()
+func apply_impulse(impulse: Impulse) -> void:
+	var current_hive := hive
+	if current_hive != null:
+		current_hive.push(hive_slot, impulse)
 
 
-func setup(target: Node3D?) -> void:
-	_target = target
+func move_to(feet: Vector3, yaw: float) -> void:
+	transform = Transform3D(Basis(Vector3.UP, yaw), feet)
 
 
-func _refresh_target_position() -> void:
-	_time_until_refresh = target_refresh_interval
-	var target := _target
-	if target == null or not is_instance_valid(target):
-		_nav_agent.target_position = global_position
-		return
-
-	_nav_agent.target_position = target.global_position
+func show_tint(color: Color) -> void:
+	tint = color
 
 
-func _on_health_died(_hit: HitInfo) -> void:
+func _on_health_died(hit: HitInfo) -> void:
+	var ragdoll := DeathBody.new()
+	get_tree().root.add_child(ragdoll)
+	ragdoll.setup(self, death_timeout)
+	ragdoll.apply_impulse(hit.hit_direction * death_force, hit.hit_point)
 	queue_free()

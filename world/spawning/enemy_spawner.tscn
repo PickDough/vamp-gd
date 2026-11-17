@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgow2w1q4rsg6"]
+[gd_scene format=3 uid="uid://bgow2w1q4rsg6"]
 
 [ext_resource type="Script" uid="uid://bxjwc2tuvd7k6" path="res://world/spawning/enemy_spawner.gd" id="1_xx1rs"]
 [ext_resource type="Script" uid="uid://g56sk1sio1ge" path="res://world/spawning/spawn_scenario.gd" id="2_pa70i"]
 [ext_resource type="PackedScene" uid="uid://cxx8q1e2fd1a" path="res://actors/enemies/enemy_a.tscn" id="3_n2bww"]
+[ext_resource type="Script" path="res://actors/enemies/hive/hive.gd" id="4_hive"]
 
 [sub_resource type="Resource" id="Resource_cxe0a"]
 script = ExtResource("2_pa70i")
@@ -16,3 +17,6 @@ script = ExtResource("1_xx1rs")
 spawn_scenarios = Array[ExtResource("2_pa70i")]([SubResource("Resource_cxe0a")])
 
 [node name="TickTimer" type="Timer" parent="."]
+
+[node name="Hive" type="Node" parent="."]
+script = ExtResource("4_hive")

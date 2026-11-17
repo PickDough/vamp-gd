@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/toon.gdshader" id="1_327wn"]
+
+[ext_resource type="Material" path="res://actors/player/materials/outline.tres" id="2_outline"]
+
+[resource]
+render_priority = 0
+next_pass = ExtResource("2_outline")
+shader = ExtResource("1_327wn")
+shader_parameter/albedo = Color(0.24, 0.26, 0.5, 1)

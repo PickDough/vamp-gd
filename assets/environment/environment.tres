@@ -1,15 +1,32 @@
 [gd_resource type="Environment" load_steps=3 format=3 uid="uid://bpjs1tktbr4dd"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_aehsj"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_huusd"]
+sky_top_color = Color(0.05, 0.03, 0.08, 1)
+sky_horizon_color = Color(0.3, 0.16, 0.28, 1)
+ground_bottom_color = Color(0.32, 0.18, 0.3, 1)
+ground_horizon_color = Color(0.3, 0.16, 0.28, 1)
+ground_curve = 0.2
+sun_angle_max = 20.0
 
-[sub_resource type="Sky" id="Sky_fkb48"]
-sky_material = SubResource("ProceduralSkyMaterial_aehsj")
+[sub_resource type="Sky" id="Sky_pvv6k"]
+sky_material = SubResource("ProceduralSkyMaterial_huusd")
 
 [resource]
 background_mode = 2
-background_color = Color(0.7581918, 0.7581918, 0.7581917, 1)
-sky = SubResource("Sky_fkb48")
-ambient_light_source = 3
-ambient_light_color = Color(0.7450147, 0.7414068, 0.8928988, 1)
+sky = SubResource("Sky_pvv6k")
+ambient_light_source = 2
+ambient_light_color = Color(0.62, 0.6, 0.68, 1)
+ambient_light_energy = 0.75
 reflected_light_source = 2
-tonemap_mode = 3
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.35
+glow_bloom = 0.02
+fog_enabled = true
+fog_light_color = Color(0.32, 0.18, 0.3, 1)
+fog_density = 0.0015
+fog_sky_affect = 0.0
+fog_height = 3.0
+fog_height_density = 0.05
+adjustment_enabled = true
+adjustment_contrast = 1.05

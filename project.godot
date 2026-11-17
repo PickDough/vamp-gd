@@ -14,6 +14,7 @@ config/name="vamp-gd"
 config/version="1.0.0"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("26.3", "Redot")
+run/max_fps=120
 
 [autoload]
 
@@ -29,8 +30,13 @@ gdscript/warnings/show_experimental_trait_warning=false
 
 [display]
 
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/size/window_width_override=405
+window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/handheld/orientation=1
 
 [dotnet]
 
@@ -55,7 +61,6 @@ enabled=PackedStringArray("res://addons/de_draw/plugin.cfg", "res://addons/debug
 [physics]
 
 3d/run_on_separate_thread=true
-common/physics_ticks_per_second=30
 3d/physics_engine="Jolt Physics"
 jolt_physics_3d/simulation/velocity_steps=2
 3d/solver/solver_iterations=8
@@ -64,5 +69,4 @@ common/physics_interpolation=true
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-renderer/rendering_method="mobile"
 environment/defaults/default_environment="uid://bpjs1tktbr4dd"

@@ -31,7 +31,9 @@ core/       autoloads, shared structs and traits, utilities
 MainMenu.play_pressed(letter) → Main starts a Run for that letter
 ```
 
-A game-over screen will follow the same pattern (`Run.finished` → `Main` shows it).
+```
+Run.finished → Main shows the main menu again (a game-over screen will take its place)
+```
 
 No screen frees itself or changes the scene tree root.
 
@@ -40,9 +42,10 @@ No screen frees itself or changes the scene tree root.
 `Run` is the one place that knows how the pieces of a play session fit together.
 
 - **Builds** the map for the chosen letter, and spawns the player once the map reports it is ready.
-- **Wires** dependencies by handing them down: `spawner.setup(player, map.navigation_region)`. Spawned enemies get
-  their target from the spawner. Nothing looks dependencies up through globals.
-- **Owns run state** once it exists (elapsed time, XP, gold, level), exposed as signals for the HUD.
+- **Wires** dependencies by handing them down: `spawner.setup(player, map.navigation_region)` and
+  `player.setup(spawner.hive)`. The spawner hands the hive its target; the player hands the hive, as a
+  `TargetFinder`, to its skills. Nothing looks dependencies up through globals.
+- **Owns run state** (`Score`: elapsed time so far; XP, gold and level later), exposed as signals for the HUD.
 - **Relays** cross-feature events once there are any: it listens to its children (an enemy died, a pickup was
   collected) and updates state or calls down into other children.
 
@@ -67,7 +70,8 @@ exported property values.
 | --- | --- | --- |
 | `Resource` class + `.tres` | designer-tuned data, edited in the inspector | `SkillStats`, `SpawnScenario` |
 | `struct` | values passed around at runtime, copied on assignment | `HitInfo`, `PlayerIntent` |
-| `trait` | a capability other code checks with `is` | `Damageable`, `Targetable` |
+| `trait` | a capability other code checks with `is` | `Damageable`, `TargetFinder` |
+| `RefCounted` class | logic or state with no node lifecycle, composed into a node | `BodyPhysics`, `EnemyState`, `SpatialGrid` |
 | component node | behaviour that needs a lifecycle, signals or inspector settings | `Health` |
 | `@export` on the scene | a value only one scene variant tunes | `Enemy.speed` in `enemy_a.tscn` |
 | `class` | everything else: actors, skills, the map | `Enemy`, `SliceSkill` |
@@ -95,6 +99,14 @@ SliceAction ──HitInfo──▶ Damageable.take_hit(hit) ──▶ Health.app
 - The target's `Health` component applies it and emits `damaged` and `died`. It never frees its owner.
 - The owner decides what death means (`Enemy` emits `died` and frees itself); `Run` will hear about it through that
   signal once there is XP to award.
+- Enemies hurt the player by contact: each physics frame `PlayerBody` asks its `TargetFinder` for the nearest enemy
+  within `contact_range` and takes a hit worth the current minute of the run, read from the `Score` that `Run`
+  owns and hands to the player (`player.setup(hive, score)`). A hit starts the player's
+  `InvulnerabilityTimer` (the player blinks and ignores hits until it stops).
+- `OnHitEffect` (`actors/shared/on_hit_effect.gd`) is the shared reaction to damage for anything that uses the
+  `HitReactive` trait: it knocks its owner along the hit through `apply_impulse` and flashes it through
+  `show_tint`. Enemies and the player both carry one, tuned per scene. Death stays with the owner (`Enemy` leaves a
+  `DeathBody` ragdoll). When its `Health` runs out the player stops and emits `died`; `Run` emits `finished`.
 - **Physics layers decide what can touch what.** Name them in Project Settings → Layer Names → 3D Physics, and set
   layers and masks in scenes instead of filtering by type in code:
 
@@ -102,9 +114,37 @@ SliceAction ──HitInfo──▶ Damageable.take_hit(hit) ──▶ Health.app
   | --- | --- | --- |
   | 1 | world | everything that moves |
   | 2 | player | enemies, pickups |
-  | 3 | enemies | player attacks, skill detectors |
-  | 4 | player_attacks | — (they detect enemies) |
+  | 3 | enemies | unused: enemies have no body, see Enemies below |
+  | 4 | player_attacks | unused: attacks query the hive, not physics |
   | 5 | pickups | — (the player detects them) |
+
+## Enemies
+
+- Enemies are not physics bodies and have no model nodes. An `Enemy` is a bare `Node3D` (`Health`, `OnHitEffect`)
+  that the `Hive` moves and draws. Each enemy scene names a `model_scene`, its `model_transform` and a
+  `walk_animation`; the hive bakes that animation once into a `VertexAnimation` (vertex positions per frame in a
+  texture) and draws every enemy sharing it as one instance of a `CrowdRenderer` MultiMesh, whose shader plays
+  the baked frames. A skinned model with a Skeleton3D and AnimationPlayer per enemy cost more than the whole AI
+  step; `DeathBody` still instantiates the real model for the ragdoll. Each enemy gets a pastel `body_color`
+  from its scene's `colors` when it registers; the crowd shader draws it matte with a dark outline pass, and hit
+  flashes (`Enemy.tint`) fade it to white.
+  The hive keeps two parallel arrays indexed by slot: the `Enemy` nodes and their `EnemyState` (plain data with no
+  node reference; the enemy's settings are copied in when it registers). An enemy knows its slot, so its impulses
+  go straight to its state, and it unregisters itself in `_exit_tree`.
+- Crowds stay cheap through staggering: separation is recomputed every other tick, far enemies refresh their
+  paths less often, and enemies beyond 100m run a full step only every other tick and coast in between (see
+  `EnemyState`).
+- With enough enemies the step is split into buckets that run on `WorkerThreadPool` threads. Only the main thread
+  may touch nodes, `move_and_slide` or the physics server, so a step reads the navigation server (thread-safe) and
+  the `SpatialGrid`, writes only its own `EnemyState`, and the hive then moves the nodes on the main thread. The
+  nav mesh is the floor: enemies walk along paths from `NavigationServer3D.map_get_path` and snap to
+  `map_get_closest_point_to_segment` along a short vertical probe.
+- Enemies don't block the player or each other physically. Separation between them is computed from the grid.
+- Attacks find enemies through the `TargetFinder` trait (`find_nearest`, `find_in_box`), which the hive adopts on
+  top of the same grid. `Run` hands it to the player, which hands it to its skills; skills never reference
+  `actors/`.
+- Anything that changes hive state (`register`, impulses, queries) runs on the main thread, outside the step.
+- `tools/bench/enemy_bench.tscn` measures a run under a crowd of N enemies; see its doc comment.
 
 ## Skills
 
@@ -117,19 +157,31 @@ SliceAction ──HitInfo──▶ Damageable.take_hit(hit) ──▶ Health.app
 
 ## Current layout
 
+Each feature folder keeps its scene and main script at the top and splits the rest into subfolders by concern.
+
 | Path | Contents |
 | --- | --- |
 | `main.tscn`, `main.gd` | `Main`: the main scene; switches between the menu and runs |
 | `run/` | `Run`: composition root of a play session |
 | `ui/screens/main_menu/`, `ui/theme.tres` | title screen and shared theme |
 | `world/map/` | `Map`: letter mesh, collision, navigation; emits `ready_for_player` |
+| `world/map/floor/` | `checker.gdshader` and `checker_floor.tres`: the checkered letter |
+| `world/map/void/` | `fog_sea.gdshader` (fog layers under the map), `FloatingToys` + `toy.gdshader` (shapes in the void) |
 | `world/spawning/` | `EnemySpawner`, `SpawnScenario`; `setup(player, navigation_region)` |
-| `actors/player/` | `PlayerBody`, `PlayerIntent` |
-| `actors/enemies/` | `Enemy`, `enemy_a.tscn` (with a `Health` node) |
-| `skills/shared/` | `TargetDetector`: nearest damageable bodies in range |
+| `actors/player/` | `PlayerBody` (with `Health`, `InvulnerabilityTimer` and its `Skills`), `PlayerIntent` |
+| `actors/player/materials/` | the player's toon materials (`body`, `head`, `limbs`, `hands`) and their shared light-blue `outline` pass |
+| `actors/enemies/` | `Enemy`, `EnemyModel`, `enemy_a.tscn` |
+| `actors/enemies/hive/` | `Hive`, `EnemyState`, `StepContext`: the threaded crowd simulation |
+| `actors/enemies/crowd/` | `CrowdRenderer`, `VertexAnimation` (+ `.gdshaderinc`), `crowd.gdshader`, `crowd_outline.gdshader`: drawing the crowd |
+| `actors/enemies/death/` | `DeathBody` and `ragdoll_dissolve.gdshader`: ragdolls that burn away |
+| `actors/shared/` | `OnHitEffect`, shared by enemies and the player |
 | `skills/slice/` | `SliceSkill`, `SliceAction`, their scenes and stats |
 | `data/` | `SkillStats`, `PlayerAttributes`, `words/` |
-| `core/` | `AutoloadGame` (services), `TreeQuery`, `Damageable`, `Health`, `HitInfo` |
+| `core/` | `AutoloadGame` (services), `TreeQuery`, `Score` |
+| `core/combat/` | `Health`, `HitInfo`, `Damageable`, `HitReactive`, `TargetFinder` |
+| `core/spatial/` | `SpatialGrid` |
+| `core/physics/` | `BodyPhysics` (gravity and knockback, thread-safe), `Impulse` |
 | `core/navigation/` | `NavPoints` (spawn spots), `SyncedNavigationRegion` (runtime rebake) |
+| `assets/shaders/` | `toon.gdshader`, `toon_light.gdshaderinc`, `outline.gdshader`: the matte cartoon look the player, enemies, ragdolls and toys share |
 | `spec/` | end-to-end specs; `spec/support/` holds `SceneSpec` and the VS Code runner |
-| `tools/` | `lint/` (the GDScript linter), `vscode-gspec/` (the VS Code test explorer extension) |
+| `tools/` | `lint/` (the GDScript linter), `bench/` (crowd benchmark), `vscode-gspec/` (the VS Code test explorer extension) |

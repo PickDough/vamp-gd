@@ -169,7 +169,7 @@ func _refresh_path() -> void:
   nesting. Specs are exempt: each one is a single long scenario on purpose.
 - Split a long function by naming its steps (`_read_intent()`, `_next_velocity()`), but don't let a script turn
   into a pile of small functions. Logic that is self-contained or reusable gets its own script or node:
-  `NavPoints` and `SyncedNavigationRegion` for navigation, `TargetDetector` for skill targeting,
+  `NavPoints` and `SyncedNavigationRegion` for navigation, `SpatialGrid` and `BodyPhysics` for the hive,
   `SkillStats.roll_hit()` for hit rolls. Prefer a node from the scene (a `Timer`, a `RayCast3D`) over code that
   rebuilds it.
 - More than four or five parameters usually means the function is doing too much; consider a struct.

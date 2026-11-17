@@ -3,7 +3,8 @@ class_name Map
 extends Node3D
 
 ## A walkable letter. Builds the letter's mesh, collision and navigation, then offers the player a spawn point
-## away from the letter's edges.
+## away from the letter's edges. The letter wears a checkerboard, two fog layers drift in the void under it and toy
+## shapes float around it once the navigation mesh is ready.
 
 signal ready_for_player(spawn_point: Vector3)
 
@@ -20,6 +21,7 @@ var letter: String = "A"
 @onready var enemy_spawner: EnemySpawner = $EnemySpawner
 @onready var _text_mesh: MeshInstance3D = $NavigationRegion3D/TextMesh
 @onready var _voxel_gi: VoxelGI = $VoxelGI
+@onready var _floating_toys: FloatingToys = $FloatingToys
 
 
 static func new_from_letter(map_letter: String) -> Map:
@@ -51,4 +53,6 @@ func _create_letter_mesh() -> TextMesh:
 func _on_navigation_ready() -> void:
 	var region := navigation_region.get_rid()
 	var layers := navigation_region.navigation_layers
-	ready_for_player.emit(NavPoints.random_inset(region, layers, SPAWN_EDGE_INSET, SPAWN_PICK_ATTEMPTS))
+	var spawn_point := NavPoints.random_inset(region, layers, SPAWN_EDGE_INSET, SPAWN_PICK_ATTEMPTS)
+	_floating_toys.scatter(region, spawn_point.y)
+	ready_for_player.emit(spawn_point)

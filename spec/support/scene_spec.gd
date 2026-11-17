@@ -8,6 +8,9 @@ extends GSpec
 ## runner starts specs from its own _ready, while the root is still busy. Clicks wait for the first layout pass
 ## and are sent in window coordinates, which the stretch mode scales away from canvas coordinates. Inside the
 ## editor (the GSpec panel) every example fails at once, because the editor doesn't run game scripts.
+##
+## spawn_enemy() registers the enemy with the run's hive. A chasing enemy walks toward the player; any other stands
+## still but still falls and takes knockback.
 
 const MAIN_SCENE := "res://main.tscn"
 const RUN_SCENE := "res://run/run.tscn"
@@ -63,18 +66,16 @@ func wait_for_player(run: Run) -> PlayerBody:
 	return run.player
 
 
-func spawn_enemy(position: Vector3, target: Node3D? = null) -> Enemy:
-	var enemy := (load(ENEMY_A_SCENE) as PackedScene).instantiate() as Enemy
-	enemy.setup(target)
-	tree.current_scene.add_child(enemy)
-	enemy.global_position = position
-	return enemy
+func spawn_enemy(position: Vector3, chases: bool = false) -> Enemy:
+	var run := tree.current_scene as Run
+	return run.map.enemy_spawner.spawn(load(ENEMY_A_SCENE) as PackedScene, position, chases)
 
 
-func spawn_pinned_enemy(position: Vector3) -> Enemy:
-	var enemy := spawn_enemy(position)
-	enemy.set_physics_process(false)
-	return enemy
+func clear_enemies(run: Run) -> void:
+	var spawner := run.map.enemy_spawner
+	(spawner.get_node("TickTimer") as Timer).stop()
+	for enemy: Enemy in find_all(spawner, Enemy):
+		enemy.free()
 
 
 func health_of(enemy: Enemy) -> Health:

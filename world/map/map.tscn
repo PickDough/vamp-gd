@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b1rtmxwie6nni"]
+[gd_scene format=3 uid="uid://b1rtmxwie6nni"]
 
 [ext_resource type="Script" uid="uid://ch3l3m8fy4lkn" path="res://world/map/map.gd" id="1_urvl1"]
 [ext_resource type="VoxelGIData" uid="uid://ct5e38oua4haq" path="res://world/map/map.VoxelGI_data.res" id="2_ers5l"]
@@ -6,6 +6,9 @@
 [ext_resource type="Script" uid="uid://bdp1mbdlin6us" path="res://core/navigation/synced_navigation_region.gd" id="4_navsync"]
 [ext_resource type="Script" uid="uid://g56sk1sio1ge" path="res://world/spawning/spawn_scenario.gd" id="5_l1bpj"]
 [ext_resource type="PackedScene" uid="uid://cxx8q1e2fd1a" path="res://actors/enemies/enemy_a.tscn" id="6_sft5n"]
+[ext_resource type="Material" path="res://world/map/floor/checker_floor.tres" id="7_checker"]
+[ext_resource type="Material" path="res://world/map/void/fog_sea.tres" id="8_fog"]
+[ext_resource type="Script" path="res://world/map/void/floating_toys.gd" id="9_toys"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_abqju"]
 geometry_parsed_geometry_type = 1
@@ -22,10 +25,13 @@ depth = 12.0
 [sub_resource type="Resource" id="Resource_2por4"]
 script = ExtResource("5_l1bpj")
 radius_around_player = 150.0
-amount_per_tick = 416.0
-max_enemies = 1250
+amount_per_tick = 100.0
+max_enemies = 1000
 enemy_scenes = Array[PackedScene]([ExtResource("6_sft5n")])
 metadata/_custom_type_script = "uid://g56sk1sio1ge"
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fog"]
+size = Vector2(900, 900)
 
 [node name="Map" type="Node3D"]
 script = ExtResource("1_urvl1")
@@ -40,11 +46,38 @@ script = ExtResource("4_navsync")
 
 [node name="TextMesh" type="MeshInstance3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+material_override = ExtResource("7_checker")
 mesh = SubResource("TextMesh_l1bpj")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="NavigationRegion3D/TextMesh"]
-transform = Transform3D(-0.3414302, -4.1084643e-08, -0.93990725, 4.1084647e-08, 1, -5.8635777e-08, 0.93990725, -5.8635774e-08, -0.3414302, -70.317055, -7.4522185, -32.489594)
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.81915206, 0.50643796, -0.26927787, 0, 0.4694716, 0.88294756, 0.57357645, -0.72326833, 0.38456863, 0, 40, 0)
+light_color = Color(1, 0.98, 0.95, 1)
+light_energy = 1.1
+light_angular_distance = 1.0
 shadow_enabled = true
+shadow_bias = 0.05
+shadow_normal_bias = 1.0
+shadow_blur = 1.0
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.25
+directional_shadow_max_distance = 45.0
+
+[node name="FogSeaNear" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("PlaneMesh_fog")
+surface_material_override/0 = ExtResource("8_fog")
+
+[node name="FogSeaFar" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.7648422, 0, 0.64421767, 0, 1, 0, -0.64421767, 0, 0.7648422, 0, -7, 0)
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("PlaneMesh_fog")
+surface_material_override/0 = ExtResource("8_fog")
+
+[node name="FloatingToys" type="Node3D" parent="."]
+script = ExtResource("9_toys")
 
 [node name="EnemySpawner" parent="." instance=ExtResource("3_c3pkw")]
 spawn_scenarios = Array[ExtResource("5_l1bpj")]([SubResource("Resource_2por4")])

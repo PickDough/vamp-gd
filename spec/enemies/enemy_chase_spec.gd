@@ -7,14 +7,14 @@ func spec() -> void:
 	describe("Enemy", func() -> void:
 		it("chases the player along the nav mesh until it reaches them", func() -> void:
 			var run := await start_run("A")
-			var map := run.map
-			var player := run.player
+			var map: Map = run.map
+			var player: PlayerBody = run.player
 			if player == null:
 				return
 			TreeQuery.find_under(player, SliceSkill).free()
-			var region := map.navigation_region.get_rid()
+			var region: RID = map.navigation_region.get_rid()
 			var start := NavigationServer3D.region_get_closest_point(region, player.global_position + Vector3.RIGHT * 8)
-			var enemy := spawn_enemy(start, player)
+			var enemy := spawn_enemy(start, true)
 
 			var start_distance := horizontal_distance(enemy, player)
 			await wait_seconds(1.0)

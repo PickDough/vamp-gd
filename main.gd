@@ -1,7 +1,8 @@
 class_name Main
 extends Node
 
-## Root of the game. Shows the main menu and starts runs; the only code that changes screens.
+## Root of the game. Shows the main menu and starts runs; the only code that changes screens. A finished run
+## returns to the main menu.
 
 const MAIN_MENU_SCENE_PATH := "res://ui/screens/main_menu/main_menu.tscn"
 const RUN_SCENE_PATH := "res://run/run.tscn"
@@ -28,6 +29,7 @@ func _show_main_menu() -> void:
 func _start_run(letter: String) -> void:
 	var run := (load(RUN_SCENE_PATH) as PackedScene).instantiate() as Run
 	run.letter = letter
+	run.finished.connect(_show_main_menu, CONNECT_DEFERRED)
 	_show(run)
 
 

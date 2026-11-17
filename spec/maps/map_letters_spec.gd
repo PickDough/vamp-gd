@@ -8,15 +8,15 @@ func spec() -> void:
 		for letter in LETTERS:
 			it("builds a walkable %s with the player standing on it" % letter, func() -> void:
 				var run := await start_run(letter)
-				var map := run.map
-				var player := run.player
+				var map: Map = run.map
+				var player: PlayerBody = run.player
 				if player == null:
 					return
 
 				expect(letter_shown(map)).to(eq(letter))
 				expect(map.navigation_region.navigation_mesh.get_polygon_count()).to(be_greater_than(0))
 
-				var region := map.navigation_region.get_rid()
+				var region: RID = map.navigation_region.get_rid()
 				var on_nav_mesh := NavigationServer3D.region_get_closest_point(region, player.global_position)
 				expect(on_nav_mesh.distance_to(player.global_position)).to(be_less_than(NAV_MESH_TOLERANCE))
 

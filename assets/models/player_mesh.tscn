@@ -1,6 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://bk0ccn0br1xyt"]
+[gd_scene format=3 uid="uid://bk0ccn0br1xyt"]
 
 [ext_resource type="PackedScene" uid="uid://cpoy2t7wrlgp8" path="res://assets/blender/dude.blend" id="1_uur0h"]
+[ext_resource type="Material" path="res://actors/player/materials/body.tres" id="2_body"]
+[ext_resource type="Material" path="res://actors/player/materials/limbs.tres" id="3_limbs"]
+[ext_resource type="Material" path="res://actors/player/materials/hands.tres" id="4_hands"]
+[ext_resource type="Material" path="res://actors/player/materials/head.tres" id="5_head"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w6vbd"]
 animation = &"Fall_001"
@@ -144,6 +148,36 @@ transform = Transform3D(0.10946038, -0.14371356, -0.9835465, 0.13968006, -0.9774
 
 [node name="Torso_003" parent="Armature/Skeleton3D" index="9"]
 transform = Transform3D(0.94687986, 0.024017397, -0.32068747, 1.3969839e-08, -0.99720705, -0.0746834, -0.3215875, 0.07071662, -0.9442298, -0.00975251, 1.0004869, 0.02487902)
+
+[node name="HandL" parent="Armature/Skeleton3D/Hand_L" index="0"]
+material_override = ExtResource("4_hands")
+
+[node name="ArmL" parent="Armature/Skeleton3D/Arm_L" index="0"]
+material_override = ExtResource("3_limbs")
+
+[node name="HandL_001" parent="Armature/Skeleton3D/Hand_R" index="0"]
+material_override = ExtResource("4_hands")
+
+[node name="ArnR" parent="Armature/Skeleton3D/Arm_R" index="0"]
+material_override = ExtResource("3_limbs")
+
+[node name="Head" parent="Armature/Skeleton3D/Torso_002" index="0"]
+material_override = ExtResource("5_head")
+
+[node name="FootL" parent="Armature/Skeleton3D/Leg2_L" index="0"]
+material_override = ExtResource("2_body")
+
+[node name="LegL" parent="Armature/Skeleton3D/Leg_L" index="0"]
+material_override = ExtResource("3_limbs")
+
+[node name="FootR" parent="Armature/Skeleton3D/Leg2_R" index="0"]
+material_override = ExtResource("2_body")
+
+[node name="LegR" parent="Armature/Skeleton3D/Leg_R" index="0"]
+material_override = ExtResource("3_limbs")
+
+[node name="Torso" parent="Armature/Skeleton3D/Torso_003" index="0"]
+material_override = ExtResource("2_body")
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 tree_root = SubResource("AnimationNodeStateMachine_hedxl")
